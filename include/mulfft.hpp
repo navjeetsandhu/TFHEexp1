@@ -137,21 +137,4 @@ inline void PolyMulRescaleUnsigned(Polynomial<P> &res,
     TwistFFTrescale<P>(res, ffta);
 }
 
-template <class P>
-std::unique_ptr<std::array<PolynomialInFD<P>, 2 * P::n>> XaittGen()
-{
-    std::unique_ptr<std::array<PolynomialInFD<P>, 2 * P::n>> xaitt =
-        std::make_unique<std::array<PolynomialInFD<P>, 2 * P::n>>();
-    for (int i = 0; i < 2 * P::n; i++) {
-        std::array<typename P::T, P::n> xai = {};
-        xai[0] = -1;
-        if (i < P::n)
-            xai[i] += 1;
-        else
-            xai[i - P::n] -= 1;
-        TwistIFFT<P>((*xaitt)[i], xai);
-    }
-    return xaitt;
-}
-
 }  // namespace TFHEpp
