@@ -68,46 +68,8 @@ void bkfftgen(BootstrappingKeyFFT<P>& bkfft, const SecretKey& sk)
                 sk.key.get<typename P::targetP>());
 }
 
-template <class P>
-void bknttgen(BootstrappingKeyNTT<P>& bkntt,
-              const Key<typename P::domainP>& domainkey,
-              const Key<typename P::targetP>& targetkey)
-{
-    for (int i = 0; i < P::domainP::k * P::domainP::n; i++) {
-        Polynomial<typename P::targetP> plainpoly = {};
-        plainpoly[0] = domainkey[i];
-        bkntt[i] =
-            trgswnttSymEncrypt<typename P::targetP>(plainpoly, targetkey);
-    }
-}
 
-template <class P>
-void bknttgen(BootstrappingKeyNTT<P>& bkntt, const SecretKey& sk)
-{
-    bknttgen<P>(bkntt, sk.key.get<typename P::domainP>(),
-                sk.key.get<typename P::targetP>());
-}
 
-template <class P>
-void bkrainttgen(BootstrappingKeyRAINTT<P>& bkraintt,
-                 const Key<typename P::domainP>& domainkey,
-                 const Key<typename P::targetP>& targetkey)
-{
-#pragma omp parallel for
-    for (int i = 0; i < P::domainP::k * P::domainP::n; i++) {
-        Polynomial<typename P::targetP> plainpoly = {};
-        plainpoly[0] = domainkey[i];
-        bkraintt[i] =
-            trgswrainttSymEncrypt<typename P::targetP>(plainpoly, targetkey);
-    }
-}
-
-template <class P>
-void bkrainttgen(BootstrappingKeyRAINTT<P>& bkraintt, const SecretKey& sk)
-{
-    bkrainttgen<P>(bkraintt, sk.key.get<typename P::domainP>(),
-                   sk.key.get<typename P::targetP>());
-}
 
 template <class P>
 void tlwe2trlweikskgen(TLWE2TRLWEIKSKey<P>& iksk,
@@ -310,10 +272,10 @@ struct EvalKey {
     std::shared_ptr<BootstrappingKeyFFT<lvl02param>> bkfftlvl02;
     std::shared_ptr<BootstrappingKeyFFT<lvlh2param>> bkfftlvlh2;
     // BootstrappingKeyNTT
-    std::shared_ptr<BootstrappingKeyNTT<lvl01param>> bknttlvl01;
-    std::shared_ptr<BootstrappingKeyNTT<lvlh1param>> bknttlvlh1;
-    std::shared_ptr<BootstrappingKeyNTT<lvl02param>> bknttlvl02;
-    std::shared_ptr<BootstrappingKeyNTT<lvlh2param>> bknttlvlh2;
+    std::shared_ptr<BootstrappingKeyFFT<lvl01param>> bknttlvl01;
+    std::shared_ptr<BootstrappingKeyFFT<lvlh1param>> bknttlvlh1;
+    std::shared_ptr<BootstrappingKeyFFT<lvl02param>> bknttlvl02;
+    std::shared_ptr<BootstrappingKeyFFT<lvlh2param>> bknttlvlh2;
     // KeySwitchingKey
     std::shared_ptr<KeySwitchingKey<lvl10param>> iksklvl10;
     std::shared_ptr<KeySwitchingKey<lvl1hparam>> iksklvl1h;
@@ -404,32 +366,7 @@ struct EvalKey {
         else
             static_assert(false_v<typename P::T>, "Not predefined parameter!");
     }
-    template <class P>
-    void emplacebkntt(const SecretKey& sk)
-    {
-        if constexpr (std::is_same_v<P, lvl01param>) {
-            bknttlvl01 = std::make_unique<
-                BootstrappingKeyNTT<lvl01param>>();
-            bknttgen<lvl01param>(*bknttlvl01, sk);
-        }
-        else if constexpr (std::is_same_v<P, lvlh1param>) {
-            bknttlvlh1 = std::make_unique<
-                BootstrappingKeyNTT<lvlh1param>>();
-            bknttgen<lvlh1param>(*bknttlvlh1, sk);
-        }
-        else if constexpr (std::is_same_v<P, lvl02param>) {
-            bknttlvl02 = std::make_unique<
-                BootstrappingKeyNTT<lvl02param>>();
-            bknttgen<lvl02param>(*bknttlvl02, sk);
-        }
-        else if constexpr (std::is_same_v<P, lvlh2param>) {
-            bknttlvlh2 = std::make_unique<
-                BootstrappingKeyNTT<lvlh2param>>();
-            bknttgen<lvlh2param>(*bknttlvlh2, sk);
-        }
-        else
-            static_assert(false_v<typename P::T>, "Not predefined parameter!");
-    }
+
     template <class P>
     void emplacebk2bkfft()
     {
@@ -464,36 +401,7 @@ struct EvalKey {
         else
             static_assert(false_v<typename P::T>, "Not predefined parameter!");
     }
-    template <class P>
-    void emplacebk2bkntt()
-    {
-        if constexpr (std::is_same_v<P, lvl01param>) {
-            bknttlvl01 = std::make_unique<
-                BootstrappingKeyNTT<lvl01param>>();
-            for (int i = 0; i < lvl01param::domainP::n; i++)
-                (*bknttlvl01)[i] = ApplyNTT2trgsw<lvl1param>((*bklvl01)[i][0]);
-        }
-        else if constexpr (std::is_same_v<P, lvlh1param>) {
-            bknttlvlh1 = std::make_unique<
-                BootstrappingKeyNTT<lvlh1param>>();
-            for (int i = 0; i < lvlh1param::domainP::n; i++)
-                (*bknttlvlh1)[i] = ApplyNTT2trgsw<lvl1param>((*bklvlh1)[i][0]);
-        }
-        else if constexpr (std::is_same_v<P, lvl02param>) {
-            bknttlvl02 = std::make_unique<
-                BootstrappingKeyNTT<lvl02param>>();
-            for (int i = 0; i < lvl02param::domainP::n; i++)
-                (*bknttlvl02)[i] = ApplyNTT2trgsw<lvl2param>((*bklvl02)[i][0]);
-        }
-        else if constexpr (std::is_same_v<P, lvlh2param>) {
-            bknttlvlh2 = std::make_unique<
-                BootstrappingKeyNTT<lvlh2param>>();
-            for (int i = 0; i < lvlh2param::domainP::n; i++)
-                (*bknttlvlh2)[i] = ApplyNTT2trgsw<lvl2param>((*bklvlh2)[i][0]);
-        }
-        else
-            static_assert(false_v<typename P::T>, "Not predefined parameter!");
-    }
+
     template <class P>
     void emplaceiksk(const SecretKey& sk)
     {
@@ -651,24 +559,7 @@ struct EvalKey {
         else
             static_assert(false_v<typename P::T>, "Not predefined parameter!");
     }
-    template <class P>
-    BootstrappingKeyNTT<P>& getbkntt() const
-    {
-        if constexpr (std::is_same_v<P, lvl01param>) {
-            return *bknttlvl01;
-        }
-        else if constexpr (std::is_same_v<P, lvlh1param>) {
-            return *bknttlvlh1;
-        }
-        else if constexpr (std::is_same_v<P, lvl02param>) {
-            return *bknttlvl02;
-        }
-        else if constexpr (std::is_same_v<P, lvlh2param>) {
-            return *bknttlvlh2;
-        }
-        else
-            static_assert(false_v<typename P::T>, "Not predefined parameter!");
-    }
+
     template <class P>
     KeySwitchingKey<P>& getiksk() const
     {

@@ -1,5 +1,4 @@
 #pragma once
-#include "mult_ntt.hpp"
 #include "mult_fft_fpga.hpp"
 #ifdef USE_FFTW3
 #include <fft_processor_fftw.h>
@@ -120,9 +119,6 @@ inline void PolyMul(Polynomial<P> &res, const Polynomial<P> &a,
 {
     if constexpr (std::is_same_v<typename P::T, uint32_t>) {
         PolyMulFFT<P>(res, a, b);
-    }
-    else if constexpr (std::is_same_v<typename P::T, uint64_t>) {
-        PolyMulNtt<P>(res, a, b);
     }
     else {
         PolyMulNaive<P>(res, a, b);

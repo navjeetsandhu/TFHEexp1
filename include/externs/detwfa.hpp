@@ -15,9 +15,4 @@ TFHEPP_EXPLICIT_INSTANTIATION_TRLWE(INST)
 TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 #undef INST
 
-#define INST(P)                                             \
-    extern template void CMUXNTTwithPolynomialMulByXaiMinusOne<P>( \
-        TRLWE<P> & acc, const TRGSWNTT<P> &cs, const typename P::T a)
-TFHEPP_EXPLICIT_INSTANTIATION_TRLWE(INST)
-#undef INST
 }

@@ -3,9 +3,6 @@
 #include <cmath>
 #include <cstdint>
 
-#include "cuhe++.hpp"
-#include "raintt.hpp"
-
 namespace TFHEpp {
 
 template <class T, size_t N>
@@ -52,18 +49,10 @@ template <class P>
 using UnsignedPolynomial = Polynomial<P>;
 template <class P>
 using PolynomialInFD = std::array<double, P::n>;
-template <class P>
-using PolynomialNTT = std::array<cuHEpp::INTorus, P::n>;
-template <class P>
-using PolynomialRAINTT = std::array<raintt::DoubleSWord, P::n>;
-
 
 template <class P>
 using DecomposedPolynomial = std::array<Polynomial<P>, P::l>;
-template <class P>
-using DecomposedPolynomialNTT = std::array<PolynomialNTT<P>, P::l>;
-template <class P>
-using DecomposedPolynomialRAINTT = std::array<PolynomialRAINTT<P>, P::l>;
+
 
 
 template <class P>
@@ -74,10 +63,7 @@ template <class P>
 using TRLWE3 = std::array<Polynomial<P>, 3>;
 template <class P>
 using TRLWEInFD = std::array<PolynomialInFD<P>, P::k + 1>;
-template <class P>
-using TRLWENTT = std::array<PolynomialNTT<P>, P::k + 1>;
-template <class P>
-using TRLWERAINTT = std::array<PolynomialRAINTT<P>, P::k + 1>;
+
 
 
 
@@ -85,10 +71,7 @@ template <class P>
 using TRGSW = std::array<TRLWE<P>, (P::k + 1) * P::l>;
 template <class P>
 using TRGSWFFT = aligned_array<TRLWEInFD<P>, (P::k + 1) * P::l>;
-template <class P>
-using TRGSWNTT = std::array<TRLWENTT<P>, (P::k + 1) * P::l>;
-template <class P>
-using TRGSWRAINTT = std::array<TRLWERAINTT<P>, (P::k + 1) * P::l>;
+
 
 
 template <class P>
@@ -106,12 +89,7 @@ template <class P>
 using BootstrappingKeyFFT =
     std::array<BootstrappingKeyElementFFT<P>,
                P::domainP::k * P::domainP::n / P::Addends>;
-template <class P>
-using BootstrappingKeyNTT =
-    std::array<TRGSWNTT<typename P::targetP>, P::domainP::k * P::domainP::n>;
-template <class P>
-using BootstrappingKeyRAINTT =
-    std::array<TRGSWRAINTT<typename P::targetP>, P::domainP::k * P::domainP::n>;
+
 
 template <class P>
 using KeySwitchingKey = std::array<

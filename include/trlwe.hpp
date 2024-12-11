@@ -55,46 +55,6 @@ TRLWE<P> trlweSymEncryptZero(const Key<P> &key)
 }
 
 template <class P>
-TRLWERAINTT<P> trlwerainttSymEncryptZero(const uint eta, const Key<P> &key)
-{
-    static_assert(P::q == raintt::P);
-    static_assert(P::qbit == raintt::wordbits);
-    std::uniform_int_distribution<typename P::T> Torusdist(0, P::q - 1);
-    constexpr uint8_t remainder = ((P::nbit - 1) % 3) + 1;
-    TRLWERAINTT<P> c = {};
-    {
-        Polynomial<P> b;
-        for (typename P::T &i : b) i = CenteredBinomial<P>(eta);
-        raintt::TwistINTT<typename P::T, P::nbit, false>(
-            c[P::k], b, (*raintttable)[1], (*raintttwist)[1]);
-        for (int i = 0; i < P::n; i++)
-            if ((i & ((1 << remainder) - 1)) > 1)
-                c[P::k][i] = raintt::MulSREDC(c[P::k][i], raintt::R2);
-    }
-    for (int k = 0; k < P::k; k++) {
-        for (typename raintt::DoubleSWord &i : c[k]) i = Torusdist(generator);
-        PolynomialRAINTT<P> partkeyraintt;
-        {
-            Polynomial<P> partkey;
-            for (int i = 0; i < P::n; i++) partkey[i] = key[k * P::n + i];
-            raintt::TwistINTT<typename P::T, P::nbit, false>(
-                partkeyraintt, partkey, (*raintttable)[1], (*raintttwist)[1]);
-            for (int i = 0; i < P::n; i++)
-                if ((i & ((1 << remainder) - 1)) > 1)
-                    partkeyraintt[i] =
-                        raintt::MulSREDC(partkeyraintt[i], raintt::R3);
-                else
-                    partkeyraintt[i] =
-                        raintt::MulSREDC(partkeyraintt[i], raintt::R2);
-        }
-        for (int i = 0; i < P::n; i++)
-            c[P::k][i] = raintt::AddMod(
-                c[P::k][i], raintt::MulSREDC(c[k][i], partkeyraintt[i]));
-    }
-    return c;
-}
-
-template <class P>
 TRLWE<P> trlweSymEncrypt(const std::array<typename P::T, P::n> &p,
                          const double alpha, const Key<P> &key)
 {
@@ -122,22 +82,6 @@ TRLWE<P> trlweSymEncrypt(const std::array<typename P::T, P::n> &p,
         return trlweSymEncrypt<P>(p, P::eta, key);
 }
 
-template <class P, bool modswitch = false>
-TRLWERAINTT<P> trlwerainttSymEncrypt(const Polynomial<P> &p, const uint eta,
-                                     const Key<P> &key)
-{
-    TRLWERAINTT<P> c = trlwerainttSymEncryptZero<P>(eta, key);
-    PolynomialRAINTT<P> pntt;
-    raintt::TwistINTT<typename P::T, P::nbit, modswitch>(
-        pntt, p, (*raintttable)[1], (*raintttwist)[1]);
-    constexpr uint8_t remainder = ((P::nbit - 1) % 3) + 1;
-    for (int i = 0; i < P::n; i++)
-        if ((i & ((1 << remainder) - 1)) > 1)
-            pntt[i] = raintt::MulSREDC(pntt[i], raintt::R2);
-    for (int i = 0; i < P::n; i++)
-        c[P::k][i] = raintt::AddMod(pntt[i], c[P::k][i]);
-    return c;
-}
 
 template <class P>
 TRLWE<P> trlweSymIntEncrypt(const std::array<typename P::T, P::n> &p,

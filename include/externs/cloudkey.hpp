@@ -13,11 +13,6 @@ TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 #undef INST
 
-#define INST(P)                                               \
-    extern template void bknttgen<P>(BootstrappingKeyNTT<P> & bkntt, \
-                              const SecretKey& sk)
-TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
-#undef INST
 
 #define INST(P) \
     extern template void ikskgen<P>(KeySwitchingKey<P> & ksk, const SecretKey& sk)
@@ -52,14 +47,6 @@ TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 #undef INST
 
 #define INST(P) extern template void EvalKey::emplacebk2bkfft<P>()
-TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
-#undef INST
-
-#define INST(P) extern template void EvalKey::emplacebk2bkntt<P>()
-TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
-#undef INST
-
-#define INST(P) extern template void EvalKey::emplacebkntt<P>(const SecretKey& sk)
 TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 #undef INST
 
@@ -98,10 +85,6 @@ TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 #undef INST
 
 #define INST(P) extern template BootstrappingKeyFFT<P>& EvalKey::getbkfft<P>() const
-TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
-#undef INST
-
-#define INST(P) extern template BootstrappingKeyNTT<P>& EvalKey::getbkntt<P>() const
 TFHEPP_EXPLICIT_INSTANTIATION_BLIND_ROTATE(INST)
 #undef INST
 

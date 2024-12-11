@@ -76,16 +76,4 @@ inline void Decomposition(DecomposedPolynomial<P> &decpoly,
     }
 }
 
-
-template <class P>
-void DecompositionRAINTT(DecomposedPolynomialRAINTT<P> &decpolyntt,
-                         const Polynomial<P> &poly, typename P::T randbits = 0)
-{
-    DecomposedPolynomial<P> decpoly;
-    Decomposition<P>(decpoly, poly);
-    for (int i = 0; i < P::l; i++)
-        raintt::TwistINTT<typename P::T, P::nbit, false>(
-            decpolyntt[i], decpoly[i], (*raintttable)[1], (*raintttwist)[1]);
-}
-
 }  // namespace TFHEpp
