@@ -32,8 +32,6 @@ if(USE_FFTW3)
           PARENT_SCOPE)
   add_compile_definitions(USE_FFTW3)
   add_subdirectory(thirdparties/fftw)
-else()
-  add_subdirectory(thirdparties/spqlios)
 endif()
 
 if(USE_FPGA)

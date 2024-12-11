@@ -1,10 +1,6 @@
 #pragma once
 #include "mult_fft_fpga.hpp"
-#ifdef USE_FFTW3
 #include <fft_processor_fftw.h>
-#else
-#include <fft_processor_spqlios.h>
-#endif
 
 
 namespace TFHEpp {
