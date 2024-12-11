@@ -1,7 +1,6 @@
 #pragma once
 
 #include "bfv++.hpp"
-#include "circuitbootstrapping.hpp"
 #include "cloudkey.hpp"
 #include "cmuxmem.hpp"
 #include "detwfa.hpp"
@@ -29,7 +28,6 @@
 #ifndef __clang__
 // Because of some resons (may be clang bug?) this will gives linking error
 // caused by mismatching name mangling.
-#include "externs/circuitbootstrapping.hpp"
 #include "externs/gate.hpp"
 #include "externs/gatebootstrapping.hpp"
 #endif
