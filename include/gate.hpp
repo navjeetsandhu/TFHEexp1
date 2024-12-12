@@ -5,17 +5,6 @@
 #include "keyswitch.hpp"
 
 namespace TFHEpp {
-template <class brP, typename brP::targetP::T mu, class iksP, int casign,
-          int cbsign, std::make_signed_t<typename brP::domainP::T> offset>
-inline void HomGate(TLWE<typename iksP::targetP> &res,
-                    const TLWE<typename brP::domainP> &ca,
-                    const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    for (int i = 0; i <= brP::domainP::k * brP::domainP::n; i++)
-        res[i] = casign * ca[i] + cbsign * cb[i];
-    res[brP::domainP::k * brP::domainP::n] += offset;
-    GateBootstrapping<brP, mu, iksP>(res, res, ek);
-}
 
 template <class iksP, class brP, typename brP::targetP::T mu, int casign,
           int cbsign, std::make_signed_t<typename iksP::domainP::T> offset>
@@ -57,15 +46,6 @@ void HomCOPY(TLWE<P> &res, const TLWE<P> &ca)
     for (int i = 0; i <= P::k * P::n; i++) res[i] = ca[i];
 }
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomNAND(TLWE<typename iksP::targetP> &res,
-             const TLWE<typename brP::domainP> &ca,
-             const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, -1, -1, brP::domainP::mu>(res, ca, cb, ek);
-}
-
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomNAND(TLWE<typename brP::targetP> &res,
@@ -76,14 +56,6 @@ void HomNAND(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomNOR(TLWE<typename iksP::targetP> &res,
-            const TLWE<typename brP::domainP> &ca,
-            const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, -1, -1, -brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomNOR(TLWE<typename brP::targetP> &res,
@@ -94,14 +66,6 @@ void HomNOR(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomXNOR(TLWE<typename iksP::targetP> &res,
-             const TLWE<typename brP::domainP> &ca,
-             const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, -2, -2, -2 * brP::domainP::mu>(res, ca, cb, ek);
-}
 
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
@@ -113,14 +77,6 @@ void HomXNOR(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomAND(TLWE<typename iksP::targetP> &res,
-            const TLWE<typename brP::domainP> &ca,
-            const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, 1, 1, -brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomAND(TLWE<typename brP::targetP> &res,
@@ -131,14 +87,6 @@ void HomAND(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomOR(TLWE<typename iksP::targetP> &res,
-           const TLWE<typename brP::domainP> &ca,
-           const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, 1, 1, brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomOR(TLWE<typename brP::targetP> &res,
@@ -149,14 +97,6 @@ void HomOR(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomXOR(TLWE<typename iksP::targetP> &res,
-            const TLWE<typename brP::domainP> &ca,
-            const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, 2, 2, 2 * brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomXOR(TLWE<typename brP::targetP> &res,
@@ -167,14 +107,6 @@ void HomXOR(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomANDNY(TLWE<typename iksP::targetP> &res,
-              const TLWE<typename brP::domainP> &ca,
-              const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, -1, 1, -brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomANDNY(TLWE<typename brP::targetP> &res,
@@ -185,14 +117,6 @@ void HomANDNY(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomANDYN(TLWE<typename iksP::targetP> &res,
-              const TLWE<typename brP::domainP> &ca,
-              const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, 1, -1, -brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomANDYN(TLWE<typename brP::targetP> &res,
@@ -202,15 +126,6 @@ void HomANDYN(TLWE<typename brP::targetP> &res,
     HomGate<iksP, brP, mu, 1, -1, -iksP::domainP::mu>(res, ca, cb, ek);
 }
 
-
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomORNY(TLWE<typename iksP::targetP> &res,
-             const TLWE<typename brP::domainP> &ca,
-             const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, -1, 1, brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomORNY(TLWE<typename brP::targetP> &res,
@@ -221,14 +136,6 @@ void HomORNY(TLWE<typename brP::targetP> &res,
 }
 
 
-template <class brP = lvl01param, typename brP::targetP::T mu = lvl1param::mu,
-          class iksP = lvl10param>
-void HomORYN(TLWE<typename iksP::targetP> &res,
-             const TLWE<typename brP::domainP> &ca,
-             const TLWE<typename brP::domainP> &cb, const EvalKey &ek)
-{
-    HomGate<brP, mu, iksP, 1, -1, brP::domainP::mu>(res, ca, cb, ek);
-}
 template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomORYN(TLWE<typename brP::targetP> &res,
