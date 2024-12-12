@@ -52,6 +52,7 @@ add_subdirectory(src)
 
 if(ENABLE_TEST)
   add_subdirectory(unit_test/fft)
+  add_subdirectory(unit_test/batch)
   add_subdirectory(unit_test/fpga)
   add_subdirectory(unit_test/encrypt)
   add_subdirectory(unit_test/gate)
