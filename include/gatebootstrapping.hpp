@@ -44,17 +44,6 @@ constexpr Polynomial<P> mupolygen()
     return poly;
 }
 
-template <class bkP, typename bkP::targetP::T mu, class iksP>
-void GateBootstrapping(TLWE<typename bkP::domainP> &res,
-                       const TLWE<typename bkP::domainP> &tlwe,
-                       const EvalKey &ek)
-{
-    alignas(64) TLWE<typename bkP::targetP> tlwelvl1;
-    GateBootstrappingTLWE2TLWEFFT<bkP>(tlwelvl1, tlwe, ek.getbkfft<bkP>(),
-                                       mupolygen<typename bkP::targetP, mu>());
-    IdentityKeySwitch<iksP>(res, tlwelvl1, ek.getiksk<iksP>());
-}
-
 template <class iksP, class bkP, typename bkP::targetP::T mu>
 void GateBootstrapping(TLWE<typename iksP::domainP> &res,
                        const TLWE<typename iksP::domainP> &tlwe,
