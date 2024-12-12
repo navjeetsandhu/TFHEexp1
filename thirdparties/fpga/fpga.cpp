@@ -15,18 +15,20 @@ unsigned bit_reversed(unsigned x, const unsigned bits) {
     return y;
 }
 
-void correct_data_order(float2* fpgaOut, const unsigned num)
+void correct_data_order(float2* fpgaOut, const unsigned num, const unsigned batch)
 {
-    float2* tmp = new float2[num]();
+    unsigned total_sz = batch * num;
+    float2* tmp = new float2[total_sz]();
     unsigned log_dim = log2(num);
-
-        for(unsigned i = 0; i < num; i++){
-            unsigned bit_rev = bit_reversed(i, log_dim);
-            tmp[i].x = fpgaOut[bit_rev].x;
-            tmp[i].y = fpgaOut[bit_rev].y;
+    for(unsigned j = 0; j < batch; j++) {
+        for (unsigned i = 0; i < num; i++) {
+            unsigned index = (j*num) + i;
+            unsigned bit_rev = (j*num) + bit_reversed(i, log_dim);
+            tmp[index].x = fpgaOut[bit_rev].x;
+            tmp[index].y = fpgaOut[bit_rev].y;
         }
-
-    for(unsigned i = 0; i < num; i++ ){
+    }
+    for(unsigned i = 0; i < total_sz; i++ ){
         fpgaOut[i].x = tmp[i].x;
         fpgaOut[i].y = tmp[i].y;
     }
@@ -61,13 +63,13 @@ void fpga_close() {
  * @param  inv  : int toggle to activate backward FFT
  * @return int : time taken in milliseconds for data transfers and execution
  */
-fpga_t fpga_fft(const unsigned num, const float2 *inp, float2 *out, const bool inv)
+fpga_t fpga_fft(const unsigned num, const float2 *inp, float2 *out, const bool inv, const unsigned batch)
 {
     fpga_t runtime ={0, 0, 0, 0,0, false};
 
     try {
-        runtime = fftfpgaf_c2c_1d(num, inp, out, inv, 1);
-        correct_data_order(out, num);
+        runtime = fftfpgaf_c2c_1d(num, inp, out, inv, batch);
+        correct_data_order(out, num, batch);
     }
     catch(const char* msg){
         cerr << msg << endl;

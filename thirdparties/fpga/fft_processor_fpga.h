@@ -22,11 +22,11 @@ private:
 public:
     FFT_Processor_FPGA(const int32_t N);
 
-    void execute_reverse_int(double *res, const int32_t *a);
+    void execute_reverse_int(double *res, const int32_t *a, unsigned batch);
 
-    void execute_reverse_torus32(double *res, const uint32_t *a);
+    void execute_reverse_torus32(double *res, const uint32_t *a, unsigned batch = 1);
 
-    void execute_direct_torus32(uint32_t *res, const double *a);
+    void execute_direct_torus32(uint32_t *res, const double *a, unsigned batch = 1);
 
     void execute_direct_torus32_rescale(uint32_t *res, const double *a,
                                         const double delta);

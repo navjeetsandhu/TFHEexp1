@@ -8,12 +8,14 @@
 
 
 #define CAST_DOUBLE_TO_UINT32(d) ((uint32_t)((int64_t)(d)))
+#define max_batch 500
+
 
 FFT_Processor_FPGA::FFT_Processor_FPGA(const int32_t N)
     : _2N(2 * N), N(N), Ns2(N / 2)
 {
-    inbuf = new float2[Ns2]();
-    outbuf = new float2[Ns2]();
+    inbuf = new float2[Ns2*max_batch]();
+    outbuf = new float2[Ns2*max_batch]();
 
     for (int i = 0; i < Ns2; i++) {
         double value = (double)i * M_PI / (double)N;
@@ -22,24 +24,34 @@ FFT_Processor_FPGA::FFT_Processor_FPGA(const int32_t N)
     fpga_initialize();
 }
 
-void FFT_Processor_FPGA::execute_reverse_int(double *res, const int32_t *a)
+void FFT_Processor_FPGA::execute_reverse_int(double *res, const int32_t *a, unsigned batch)
 {
-    for (int i = 0; i < Ns2; i++) {
-        auto tmp = twist[i] * std::complex((double)a[i], (double)a[Ns2 + i]);
-        inbuf[i].x = tmp.real();
-        inbuf[i].y = tmp.imag();
+    for(unsigned j = 0; j < batch; j++) {
+        for (unsigned i = 0; i < Ns2; i++) {
+            unsigned aIndex = (j*N) + i;
+            unsigned index = (j*Ns2) + i;
+            auto tmp =
+                twist[i] * std::complex((double)a[aIndex], (double)a[Ns2 + aIndex]);
+            inbuf[index].x = tmp.real();
+            inbuf[index].y = tmp.imag();
+        }
     }
-    runTimeRc = fpga_fft(Ns2, inbuf, outbuf, false);
-    for (int i = 0; i < Ns2; i++) {
-        res[i] = outbuf[i].x;
-        res[i + Ns2] = outbuf[i].y;
+    runTimeRc = fpga_fft(Ns2, inbuf, outbuf, false, batch);
+    for(unsigned j = 0; j < batch; j++) {
+        for (unsigned i = 0; i < Ns2; i++) {
+            unsigned resIndex = (j*N) + i;
+            unsigned index = (j*Ns2) + i;
+            res[resIndex] = outbuf[index].x;
+            res[resIndex + Ns2] = outbuf[index].y;
+        }
     }
 }
 
-void FFT_Processor_FPGA::execute_reverse_torus32(double *res, const uint32_t *a)
+void FFT_Processor_FPGA::execute_reverse_torus32(double *res, const uint32_t *a, unsigned batch)
 {
-    execute_reverse_int(res, (int32_t *)a);
+    execute_reverse_int(res, (int32_t *)a, batch);
 }
+
 
 void FFT_Processor_FPGA::execute_reverse_torus64(double *res, const uint64_t *a)
 {
@@ -56,18 +68,26 @@ void FFT_Processor_FPGA::execute_reverse_torus64(double *res, const uint64_t *a)
     }
 }
 
-void FFT_Processor_FPGA::execute_direct_torus32(uint32_t *res, const double *a)
+void FFT_Processor_FPGA::execute_direct_torus32(uint32_t *res, const double *a, unsigned batch)
 {
-    for (int i = 0; i < Ns2; i++) {
-        inbuf[i].x = a[i] / Ns2;
-        inbuf[i].y  = a[Ns2 + i] / Ns2;
+    for(unsigned j = 0; j < batch; j++) {
+        for (unsigned i = 0; i < Ns2; i++) {
+            unsigned aIndex = (j * N) + i;
+            unsigned index = (j * Ns2) + i;
+            inbuf[index].x = a[aIndex] / Ns2;
+            inbuf[index].y = a[Ns2 + aIndex] / Ns2;
+        }
     }
-    runTimeRc = fpga_fft(Ns2, inbuf, outbuf, true);
-    for (int i = 0; i < Ns2; i++) {
-        auto res_tmp = std::complex<double>(outbuf[i].x, outbuf[i].y) *
-                       std::conj(twist[i]);
-        res[i] = CAST_DOUBLE_TO_UINT32(res_tmp.real());
-        res[i + Ns2] = CAST_DOUBLE_TO_UINT32(res_tmp.imag());
+    runTimeRc = fpga_fft(Ns2, inbuf, outbuf, true, batch);
+    for(unsigned j = 0; j < batch; j++) {
+        for (unsigned i = 0; i < Ns2; i++) {
+            unsigned resIndex = (j*N) + i;
+            unsigned index = (j*Ns2) + i;
+            auto res_tmp = std::complex<double>(outbuf[index].x, outbuf[index].y) *
+                           std::conj(twist[i]);
+            res[resIndex] = CAST_DOUBLE_TO_UINT32(res_tmp.real());
+            res[resIndex + Ns2] = CAST_DOUBLE_TO_UINT32(res_tmp.imag());
+        }
     }
 }
 
