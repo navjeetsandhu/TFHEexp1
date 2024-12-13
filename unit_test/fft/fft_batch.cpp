@@ -9,26 +9,26 @@ using namespace TFHEpp;
 
 int main()
 {
-
     random_device seed_gen;
     default_random_engine engine(seed_gen());
 
     uniform_int_distribution<uint32_t> Torus32dist(0, UINT32_MAX);
 
-    cout << "Start LVL1 test." << endl;
-    Polynomial<lvl1param> a;
-    for (typename TFHEpp::lvl1param::T &i : a) i = Torus32dist(engine);
-    PolynomialInFD<lvl1param> resfft;
-    TFHEpp::TwistIFFT<lvl1param>(resfft, a);
+    cout << "Start fft batch test." << endl;
+    constexpr int batch = 2;
+    Polynomialn<lvl1param, batch> a;
+    for (int j = 0; j < batch; j++) {
+        for (typename TFHEpp::lvl1param::T &i : a[j]) i = Torus32dist(engine);
+    PolynomialInFDn<lvl1param, batch> resfft;
+    TFHEpp::TwistIFFTbatch<lvl1param, batch>(resfft, a);
     Polynomial<lvl1param> res;
-    TFHEpp::TwistFFT<lvl1param>(res, resfft);
-    for (int i = 0; i < lvl1param::n; i++) {
-        auto b = abs(static_cast<int32_t>(a[i] - res[i]));
-        cout << b << " ";
+    TFHEpp::TwistFFTbatch<lvl1param, batch>(res, resfft);
+    for (int j = 0; j < batch; j++) {
+        for (int i = 0; i < lvl1param::n; i++) {
+            auto b = abs(static_cast<int32_t>(a[j][i] - res[j][i]));
+            cout << b << " ";
         //c_assert(b <= 1);
     }
-    cout << "FFT Passed" << endl;
-
 
     return 0;
 }
