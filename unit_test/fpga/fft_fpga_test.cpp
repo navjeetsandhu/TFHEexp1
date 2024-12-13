@@ -1,4 +1,3 @@
-#include "mult_fft.hpp"
 #include "mult_fft_fpga.hpp"
 #include <numeric>
 #include <cmath>
@@ -25,7 +24,7 @@ void test_fft(const std::array<uint32_t, 1 << nbits>& p1)
 
     TwistFpgaFFT<N>(result, fft);
     string_msg = "TwistFFT 32 bit";
-    print_results<uint32_t>(string_msg,  reinterpret_cast<int32_t*>(result.data()), result.size());
+    print_results<int32_t>(string_msg,  reinterpret_cast<int32_t*>(result.data()), result.size());
 }
 
 
