@@ -16,6 +16,8 @@ int main()
 
     cout << "Start fft batch test." << endl;
     constexpr int batch = 2;
+    
+
     Polynomialn<lvl1param, batch> a;
     for (int j = 0; j < batch; j++)
         for (typename TFHEpp::lvl1param::T &i : a[j]) i = Torus32dist(engine);
