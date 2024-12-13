@@ -3,6 +3,7 @@
 #include <cmath>
 #include "c_assert.hpp"
 #include <tfhe++.hpp>
+#include <random>
 
 template <int nbits>
 void test_fft(const std::array<uint32_t, 1 << nbits>& p1)
@@ -38,6 +39,8 @@ void test_fft_p()
     std::array<P,  N> p1{};
     using namespace TFHEpp;
     //std::iota(p1.begin(), p1.end(), 1);
+    random_device seed_gen;
+    default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> Torus32dist(0, UINT32_MAX);
     for (P &i : p1) i = Torus32dist(engine);
     test_fft<nbits>(p1);
