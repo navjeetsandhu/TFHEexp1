@@ -23,8 +23,8 @@ int main()
     Polynomial<lvl1param> res;
     TFHEpp::TwistFFT<lvl1param>(res, resfft);
     for (int i = 0; i < lvl1param::n; i++) {
-        auto a = abs(static_cast<int32_t>(a[i] - res[i]));
-        cout << a;
+        auto b = abs(static_cast<int32_t>(a[i] - res[i]));
+        cout << b;
         c_assert(a <= 1);
     }
     cout << "FFT Passed" << endl;
