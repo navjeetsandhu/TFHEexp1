@@ -36,7 +36,7 @@ void test_fft_p()
     constexpr int N = 1 << nbits;
 
     std::array<P,  N> p1{};
-
+    using namespace TFHEpp;
     //std::iota(p1.begin(), p1.end(), 1);
     uniform_int_distribution<uint32_t> Torus32dist(0, UINT32_MAX);
     for (typename P &i : p1) i = Torus32dist(engine);
