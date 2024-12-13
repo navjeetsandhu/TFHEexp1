@@ -2,6 +2,7 @@
 #include <numeric>
 #include <cmath>
 #include "c_assert.hpp"
+#include <tfhe++.hpp>
 
 template <int nbits>
 void test_fft(const std::array<uint32_t, 1 << nbits>& p1)
@@ -35,8 +36,10 @@ void test_fft_p()
     constexpr int N = 1 << nbits;
 
     std::array<P,  N> p1{};
-    std::array<P,  N> p2{};
-    std::iota(p1.begin(), p1.end(), 1);
+
+    //std::iota(p1.begin(), p1.end(), 1);
+    uniform_int_distribution<uint32_t> Torus32dist(0, UINT32_MAX);
+    for (typename P &i : p1) i = Torus32dist(engine);
     test_fft<nbits>(p1);
 }
 
