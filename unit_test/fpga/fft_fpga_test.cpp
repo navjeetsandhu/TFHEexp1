@@ -33,7 +33,7 @@ void test_fft(const std::array<uint32_t, 1 << nbits>& p1)
     print_results<int32_t>(string_msg,  reinterpret_cast<int32_t*>(result.data()), result.size());
 
 
-    cout <<"\n Difference between input and result \n"
+    cout <<"\n Difference between input and result \n";
     for (int i = 0; i < N; i++) {
         auto b = abs(static_cast<int32_t>(p1[i] - result[i]));
         cout << b << " ";
