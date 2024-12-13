@@ -44,16 +44,19 @@ using TLWE = std::array<typename P::T, P::k * P::n + 1>;
 template <class P>
 using Polynomial = std::array<typename P::T, P::n>;
 
+template <class P, int batch>
+using Polynomialn = std::array<Polynomial<P>, batch>;
 
 template <class P>
 using UnsignedPolynomial = Polynomial<P>;
 template <class P>
 using PolynomialInFD = std::array<double, P::n>;
 
+template <class P, int batch>
+using PolynomialInFDn = std::array<PolynomialInFD<P>, batch>;
+
 template <class P>
 using DecomposedPolynomial = std::array<Polynomial<P>, P::l>;
-
-
 
 template <class P>
 using TRLWE = std::array<Polynomial<P>, P::k + 1>;

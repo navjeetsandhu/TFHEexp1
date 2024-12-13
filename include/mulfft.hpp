@@ -5,6 +5,24 @@
 
 namespace TFHEpp {
 
+template <class P, int batch>
+inline void TwistFFTbatch(Polynomialn<P, batch> &res, const PolynomialInFDn<P, batch> &a)
+{
+    if constexpr (std::is_same_v<P, lvl1param>)
+        TwistFpgaFFTbatch(res[0].data(), a[0].data(), batch);
+    else
+        static_assert(false_v<typename P::T>, "Undefined TwistFFT batch!");
+}
+
+template <class P, int batch>
+inline void TwistIFFTbatch(PolynomialInFDn<P, batch> &res, const Polynomialn<P, batch> &a)
+{
+    if constexpr (std::is_same_v<P, lvl1param>)
+        TwistFpgaIFFTbatch(res[0].data(), a[0].data(), batch);
+    else
+        static_assert(false_v<typename P::T>, "Undefined TwistIFFT batch!");
+}
+
 template <class P>
 inline void TwistFFT(Polynomial<P> &res, const PolynomialInFD<P> &a)
 {
