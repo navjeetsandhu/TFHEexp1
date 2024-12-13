@@ -9,7 +9,7 @@ using namespace TFHEpp;
 
 int main()
 {
-    constexpr uint32_t num_test = 1;
+
     random_device seed_gen;
     default_random_engine engine(seed_gen());
 
