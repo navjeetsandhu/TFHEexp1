@@ -4,6 +4,10 @@
 #include "c_assert.hpp"
 #include <tfhe++.hpp>
 #include <random>
+#include <iostream>
+
+
+using namespace std;
 
 template <int nbits>
 void test_fft(const std::array<uint32_t, 1 << nbits>& p1)
@@ -27,6 +31,15 @@ void test_fft(const std::array<uint32_t, 1 << nbits>& p1)
     TwistFpgaFFT<N>(result, fft);
     string_msg = "TwistFFT 32 bit";
     print_results<int32_t>(string_msg,  reinterpret_cast<int32_t*>(result.data()), result.size());
+
+
+    cout <<"\n Difference between input and result \n"
+    for (int i = 0; i < N; i++) {
+        auto b = abs(static_cast<int32_t>(p1[i] - result[i]));
+        cout << b << " ";
+        //c_assert(b <= 1);
+    }
+    cout <<"\n";
 }
 
 
