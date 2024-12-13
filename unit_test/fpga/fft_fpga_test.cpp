@@ -39,7 +39,7 @@ void test_fft_p()
     using namespace TFHEpp;
     //std::iota(p1.begin(), p1.end(), 1);
     uniform_int_distribution<uint32_t> Torus32dist(0, UINT32_MAX);
-    for (typename P &i : p1) i = Torus32dist(engine);
+    for (P &i : p1) i = Torus32dist(engine);
     test_fft<nbits>(p1);
 }
 
