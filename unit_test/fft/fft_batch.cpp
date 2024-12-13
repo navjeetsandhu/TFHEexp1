@@ -17,18 +17,18 @@ int main()
     cout << "Start fft batch test." << endl;
     constexpr int batch = 2;
     Polynomialn<lvl1param, batch> a;
-    for (int j = 0; j < batch; j++) {
+    for (int j = 0; j < batch; j++)
         for (typename TFHEpp::lvl1param::T &i : a[j]) i = Torus32dist(engine);
     PolynomialInFDn<lvl1param, batch> resfft;
     TFHEpp::TwistIFFTbatch<lvl1param, batch>(resfft, a);
-    Polynomial<lvl1param> res;
+    Polynomialn<lvl1param, batch> res;
     TFHEpp::TwistFFTbatch<lvl1param, batch>(res, resfft);
-    for (int j = 0; j < batch; j++) {
+    for (int j = 0; j < batch; j++)
         for (int i = 0; i < lvl1param::n; i++) {
             auto b = abs(static_cast<int32_t>(a[j][i] - res[j][i]));
             cout << b << " ";
         //c_assert(b <= 1);
-    }
+        }
 
     return 0;
 }
