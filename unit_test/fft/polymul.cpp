@@ -25,7 +25,7 @@ int main()
     for (int i = 0; i < lvl1param::n; i++) {
         auto b = abs(static_cast<int32_t>(a[i] - res[i]));
         cout << b;
-        c_assert(a <= 1);
+        c_assert(b <= 1);
     }
     cout << "FFT Passed" << endl;
 
