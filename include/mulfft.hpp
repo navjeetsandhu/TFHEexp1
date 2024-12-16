@@ -184,6 +184,18 @@ inline void PolyMul(Polynomial<P> &res, const Polynomial<P> &a,
     }
 }
 
+template <class P, int batch>
+inline void PolyMulbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &a,
+                    const Polynomialn<P, batch> &b)
+{
+    if constexpr (std::is_same_v<typename P::T, uint32_t>)
+        PolyMulFFTbatch<P, batch>(res, a, b);
+    else
+        static_assert(false_v<typename P::T>, "PolyMulbatch!"); 
+
+}
+
+
 template <class P>
 inline void PolyMulRescaleUnsigned(Polynomial<P> &res,
                                    const UnsignedPolynomial<P> &a,
