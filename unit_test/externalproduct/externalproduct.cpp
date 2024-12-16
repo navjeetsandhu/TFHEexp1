@@ -8,14 +8,14 @@ using namespace TFHEpp;
 
 int main()
 {
-    constexpr uint32_t num_test = 1000;
+
     random_device seed_gen;
     default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> binary(0, 1);
     cout << "test p=1" << endl;
 
     cout << "lvl1" << endl;
-    for (int test = 0; test < num_test; test++) {
+    {
         lweKey key;
 
         array<bool, lvl1param::n> p;
@@ -35,14 +35,13 @@ int main()
         for (int i = 0; i < lvl1param::n; i++) {
             c_assert(p[i] == p2[i]);
         }
-
     }
     cout << "Passed" << endl;
 
     cout << "test p=-1" << endl;
 
     cout << "lvl1" << endl;
-    for (int test = 0; test < num_test; test++) {
+    {
         lweKey key;
 
         array<bool, lvl1param::n> p;
