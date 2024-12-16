@@ -67,6 +67,16 @@ inline void MulInFD(std::array<double, N> &res, const std::array<double, N> &b)
     }
 }
 
+template <class P, int batch>
+inline void MulInFDbatch(PolynomialInFDn<P, batch> &res
+                         const PolynomialInFDn<P, batch> &b)
+{
+    for (int i=0; i< batch; i++) {
+        MulInFD<P::n, batch>(res[i], b[i])
+    }
+}
+
+
 template <uint32_t N>
 inline void MulInFD(std::array<double, N> &res, const std::array<double, N> &a,
                     const std::array<double, N> &b)
@@ -81,6 +91,16 @@ inline void MulInFD(std::array<double, N> &res, const std::array<double, N> &a,
     }
 }
 
+template <class P, int batch>
+inline void MulInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P, batch> &a,
+                         const PolynomialInFDn<P, batch> &b)
+{
+    for (int i=0; i< batch; i++) {
+        MulInFD<P::n, batch>(res[i], a[i], b[i])
+    }
+}
+
+
 // Be careful about memory accesses (We assume b has relatively high memory access cost)
 template <uint32_t N>
 inline void FMAInFD(std::array<double, N> &res, const std::array<double, N> &a,
@@ -93,6 +113,16 @@ inline void FMAInFD(std::array<double, N> &res, const std::array<double, N> &a,
     for (int i = 0; i < N / 2; i++) {
         res[i + N / 2] = std::fma(a[i], b[i + N / 2], res[i + N / 2]);
         res[i] -= a[i + N / 2] * b[i + N / 2];
+    }
+}
+
+
+template <class P, int batch>
+inline void FMAInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P, batch> &a,
+                         const PolynomialInFDn<P, batch> &b)
+{
+    for (int i=0; i< batch; i++) {
+        FMAInFD<P::n, batch>(res[i], a[i], b[i])
     }
 }
 
@@ -113,6 +143,21 @@ inline void PolyMulNaive(Polynomial<P> &res, const Polynomial<P> &a,
         res[i] = ri;
     }
 }
+
+
+template <class P, int batch>
+inline void PolyMulFFTbatch(Polynomialn<P> &res, const Polynomialn<P> &a,
+                       const Polynomialn<P> &b)
+{
+    alignas(64) PolynomialInFDn<P> ffta;
+    TwistIFFTbatch<P, batch>(ffta, a);
+    alignas(64) PolynomialInFDn<P> fftb;
+    TwistIFFTbatch<P, batch>(fftb, b);
+    MulInFDbatch<P, batch>(ffta, fftb);
+    TwistFFTbatch<P, batch>(res, ffta);
+}
+
+
 
 template <class P>
 inline void PolyMulFFT(Polynomial<P> &res, const Polynomial<P> &a,
