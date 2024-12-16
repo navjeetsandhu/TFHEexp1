@@ -35,7 +35,7 @@ int main()
     for (int i = 0; i < lvl1param::n; i++) {
         auto diff = abs(static_cast<int32_t>(naieve[i] - polymul[i]));
         std::cout <<naieve[i] << " " <<  polymul[i] << " " << diff << std::endl;
-        //c_assert(abs(static_cast<int32_t>(naieve[i] - polymul[i])) <= 1);
+        c_assert(abs(static_cast<int32_t>(naieve[i] - polymul[i])) <= 90000);
      }
 
     cout << "PolyMul Passed" << endl;
