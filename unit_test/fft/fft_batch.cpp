@@ -16,7 +16,7 @@ int main()
 
     cout << "Start fft batch test." << endl;
     constexpr int batch = 2;
-    
+
 
     Polynomialn<lvl1param, batch> a;
     for (int j = 0; j < batch; j++)
