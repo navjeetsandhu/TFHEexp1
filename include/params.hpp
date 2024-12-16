@@ -57,6 +57,9 @@ using PolynomialInFDn = std::array<PolynomialInFD<P>, batch>;
 template <class P>
 using DecomposedPolynomial = std::array<Polynomial<P>, P::l>;
 
+template <class P, int batch>
+using DecomposedPolynomialn = std::array<Polynomialn<P, batch>, P::l>;
+
 template <class P>
 using TRLWE = std::array<Polynomial<P>, P::k + 1>;
 

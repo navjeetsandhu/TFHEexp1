@@ -76,4 +76,11 @@ inline void Decomposition(DecomposedPolynomial<P> &decpoly,
     }
 }
 
+template <class P, int batch>
+inline void Decompositionbatch(DecomposedPolynomialn<P, batch> &decpoly,
+                          const Polynomialn<P, batch> &poly, typename P::T randbits = 0)
+{
+    for (int i = 0; i < batch; i++)
+       Decomposition(decpoly[i], poly[i], randbits);
+}
 }  // namespace TFHEpp
