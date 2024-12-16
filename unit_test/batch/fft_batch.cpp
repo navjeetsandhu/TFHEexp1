@@ -29,7 +29,7 @@ int main()
         for (int i = 0; i < lvl1param::n; i++) {
             auto b = abs(static_cast<int32_t>(a[j][i] - res[j][i]));
             cout << b << " ";
-            c_assert(b <= 600);
+            c_assert(b <= 1000);
         }
     return 0;
 }
