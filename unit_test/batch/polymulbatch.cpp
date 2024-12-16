@@ -33,7 +33,8 @@ int main()
               naieve[i] -= static_cast<int32_t>(a[j]) * b[lvl1param::n + i - j];
     }
     for (int i = 0; i < lvl1param::n; i++) {
-        std::cout <<naieve[i] << " " <<  polymul[i] << std::endl;
+        auto diff = abs(static_cast<int32_t>(naieve[i] - polymul[i]));
+        std::cout <<naieve[i] << " " <<  polymul[i] << " " << diff << std::endl;
         //c_assert(abs(static_cast<int32_t>(naieve[i] - polymul[i])) <= 1);
      }
 
