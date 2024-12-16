@@ -72,7 +72,7 @@ inline void MulInFDbatch(PolynomialInFDn<P, batch> &res,
                          const PolynomialInFDn<P, batch> &b)
 {
     for (int i=0; i< batch; i++) {
-        MulInFD<P::n, batch>(res[i], b[i]);
+        MulInFD<P::n>(res[i], b[i]);
     }
 }
 
