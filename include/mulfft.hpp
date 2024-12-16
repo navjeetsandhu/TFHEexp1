@@ -96,7 +96,7 @@ inline void MulInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P
                          const PolynomialInFDn<P, batch> &b)
 {
     for (int i=0; i< batch; i++) {
-        MulInFD<P::n, batch>(res[i], a[i], b[i]);
+        MulInFD<P::n>(res[i], a[i], b[i]);
     }
 }
 
@@ -191,7 +191,7 @@ inline void PolyMulbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch>
     if constexpr (std::is_same_v<typename P::T, uint32_t>)
         PolyMulFFTbatch<P, batch>(res, a, b);
     else
-        static_assert(false_v<typename P::T>, "PolyMulbatch!"); 
+        static_assert(false_v<typename P::T>, "PolyMulbatch!");
 
 }
 
