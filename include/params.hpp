@@ -20,7 +20,6 @@ struct lvlh1param {
     using domainP = lvlhalfparam;
     using targetP = lvl1param;
     static constexpr uint32_t Addends = 1;
-
 };
 
 struct lvl02param {
@@ -60,22 +59,28 @@ using DecomposedPolynomial = std::array<Polynomial<P>, P::l>;
 
 template <class P>
 using TRLWE = std::array<Polynomial<P>, P::k + 1>;
-template <class P>
-using UnsignedTRLWE = std::array<Polynomial<P>, P::k + 1>;
-template <class P>
-using TRLWE3 = std::array<Polynomial<P>, 3>;
+
+template <class P, int batch>
+using TRLWEn = std::array<Polynomialn<P, batch>, P::k + 1>;
+
 template <class P>
 using TRLWEInFD = std::array<PolynomialInFD<P>, P::k + 1>;
 
-
+template <class P, int batch>
+using TRLWEInFDn = std::array<PolynomialInFDn<P, batch>, P::k + 1>;
 
 
 template <class P>
 using TRGSW = std::array<TRLWE<P>, (P::k + 1) * P::l>;
+
+template <class P, int batch>
+using TRGSWn = std::array<TRLWEn<P, batch>, (P::k + 1) * P::l>;
+
 template <class P>
 using TRGSWFFT = aligned_array<TRLWEInFD<P>, (P::k + 1) * P::l>;
 
-
+template <class P, int batch>
+using TRGSWFFTn = aligned_array<TRLWEInFDn<P, batch>, (P::k + 1) * P::l>;
 
 template <class P>
 using BootstrappingKeyElement =
