@@ -24,6 +24,34 @@ TRLWE<P> trlweSymEncryptZero(const double alpha, const Key<P> &key)
     return c;
 }
 
+template <class P, int batch>
+TRLWEn<P, batch> trlweSymEncryptZerobatch(const double alpha, const Key<P> &key)
+{
+    constexpr auto numeric_limit = std::numeric_limits<typename P::T>::max(); // i.e. 0xFFFFFFFF
+    constexpr auto dimension = P::n; // i.e. 1024
+    constexpr auto k_max = P::k;  // i.e 1
+    std::uniform_int_distribution<typename P::T> Torusdist(0, numeric_limit);
+    TRLWEn<P, batch> c;
+    for (int j=0;j<batch;j++)
+        for (typename P::T &i : c[k_max][j]) i = ModularGaussian<P>(0, alpha);
+
+    for (int k = 0; k < k_max; k++) {
+        for (int j=0;j<batch;j++)
+            for (typename P::T &i : c[k][j]) i = Torusdist(generator);
+
+
+        std::array<typename P::T, dimension> partkey;
+        for (int i = 0; i < dimension; i++) partkey[i] = key[k * dimension + i];
+        Polynomialn<P, batch> temp;
+        for (int j=0;j<batch;j++) {
+            PolyMul<P>(temp[j], c[k], partkey);
+            for (int i = 0; i < dimension; i++) c[k_max][j][i] += temp[j][i];
+        }
+    }
+    return c;
+}
+
+
 template <class P>
 TRLWE<P> trlweSymEncryptZero(const uint eta, const Key<P> &key)
 {
