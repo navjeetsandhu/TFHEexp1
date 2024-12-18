@@ -195,6 +195,20 @@ TRLWE<P> trlweSymIntEncrypt(const std::array<typename P::T, P::n> &p,
     return c;
 }
 
+template <class P, int batch>
+TRLWE<P> trlweSymIntEncryptbatch(const Polynomialn<P, batch> &p,
+                            const double alpha, const Key<P> &key)
+{
+    TRLWEn<P, batch> c = trlweSymEncryptZerobatch<P, batch>(alpha, key);
+
+    for (int j=0;j<batch;j++)
+        for (int i = 0; i < P::n; i++)
+            c[P::k][j][i] += static_cast<typename P::T>(P::delta * p[j][i]);
+    return c;
+}
+
+
+
 template <class P>
 TRLWE<P> trlweSymIntEncrypt(const std::array<typename P::T, P::n> &p,
                             const uint eta, const Key<P> &key)
@@ -205,6 +219,19 @@ TRLWE<P> trlweSymIntEncrypt(const std::array<typename P::T, P::n> &p,
     return c;
 }
 
+template <class P, int batch>
+TRLWEn<P,batch> trlweSymIntEncryptbatch(const Polynomialn<P, batch> &p,
+                            const uint eta, const Key<P> &key)
+{
+    TRLWEn<P, batch> c = trlweSymEncryptZerobatch<P, batch>(eta, key);
+
+    for (int j=0;j<batch;j++)
+        for (int i = 0; i < P::n; i++)
+            c[P::k][j][i] += static_cast<typename P::T>(P::delta * p[j][i]);
+    return c;
+}
+
+
 template <class P>
 TRLWE<P> trlweSymIntEncrypt(const std::array<typename P::T, P::n> &p,
                             const Key<P> &key)
@@ -214,6 +241,18 @@ TRLWE<P> trlweSymIntEncrypt(const std::array<typename P::T, P::n> &p,
     else
         return trlweSymIntEncrypt<P>(p, P::eta, key);
 }
+
+
+template <class P, int batch>
+TRLWEn<P, batch> trlweSymIntEncryptbatch(const Polynomialn<P, batch> &p,
+                            const Key<P> &key)
+{
+    if constexpr (P::errordist == ErrorDistribution::ModularGaussian)
+        return trlweSymIntEncryptbatch<P, batch>(p, P::alpha, key);
+    else
+        return trlweSymIntEncryptbatch<P, batch>(p, P::eta, key);
+}
+
 
 template <class P>
 Polynomial<P> trlwePhase(const TRLWE<P> &c, const Key<P> &key)
