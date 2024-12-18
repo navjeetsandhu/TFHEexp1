@@ -40,6 +40,12 @@ using Key = std::array<typename P::T, P::k * P::n>;
 template <class P>
 using TLWE = std::array<typename P::T, P::k * P::n + 1>;
 
+template <int N>
+using BooleanArray = std::array<bool, N>;
+
+template <int N, int batch>
+using BooleanArrayn = std::array<BooleanArray<N>, batch>;
+
 template <class P>
 using Polynomial = std::array<typename P::T, P::n>;
 

@@ -268,6 +268,23 @@ Polynomial<P> trlwePhase(const TRLWE<P> &c, const Key<P> &key)
     return phase;
 }
 
+template <class P, int batch>
+Polynomialn<P, batch> trlwePhasebatch(const TRLWEn<P, batch> &c, const Key<P> &key)
+{
+    Polynomialn<P, batch> phase = c[P::k];
+    for (int k = 0; k < P::k; k++) {
+        for (int j=0;j<batch;j++) {
+            Polynomial<P> mulres;
+            std::array<typename P::T, P::n> partkey;
+            for (int i = 0; i < P::n; i++) partkey[i] = key[k * P::n + i];
+            PolyMul<P>(mulres, c[k][j], partkey);
+            for (int i = 0; i < P::n; i++) phase[j][i] -= mulres[i];
+        }
+    }
+    return phase;
+}
+
+
 template <class P>
 std::array<bool, P::n> trlweSymDecrypt(const TRLWE<P> &c, const Key<P> &key)
 {
@@ -283,6 +300,25 @@ std::array<bool, P::n> trlweSymDecrypt(const TRLWE<P> &c, const Key<P> &key)
                        phase[i]) > 0;
     return p;
 }
+
+template <class P, int batch>
+BooleanArrayn<P::n, batch> trlweSymDecryptbatch(const TRLWEn<P, batch> &c, const Key<P> &key)
+{
+    Polynomialn<P, batch> phase = trlwePhasebatch<P, batch>(c, key);
+
+    BooleanArrayn<P::n, batch> p;
+    if constexpr (hasq<P>::value) {
+        for (int j=0;j<batch;j++)
+            for (int i = 0; i < P::n; i++) p[j][i] = (phase[j][i] % P::q) < P::q / 2;
+    }
+    else
+        for (int j=0;j<batch;j++)
+            for (int i = 0; i < P::n; i++)
+                p[j][i] = static_cast<typename std::make_signed<typename P::T>::type>(
+                       phase[j][i]) > 0;
+    return p;
+}
+
 
 template <class P>
 Polynomial<P> trlweSymIntDecrypt(const TRLWE<P> &c, const Key<P> &key)
@@ -302,6 +338,29 @@ Polynomial<P> trlweSymIntDecrypt(const TRLWE<P> &c, const Key<P> &key)
                P::plain_modulus;
     return p;
 }
+
+template <class P, int batch>
+Polynomialn<P, batch> trlweSymIntDecrypt(const TRLWEn<P, batch> &c, const Key<P> &key)
+{
+    Polynomialn<P, batch> phase = c[P::k];
+    for (int k = 0; k < P::k; k++) {
+        for (int j=0;j<batch;j++) {
+            Polynomial<P> mulres;
+            std::array<typename P::T, P::n> partkey;
+            for (int i = 0; i < P::n; i++) partkey[i] = key[k * P::n + i];
+            PolyMul<P>(mulres, c[j][k], partkey);
+            for (int i = 0; i < P::n; i++) phase[j][i] -= mulres[i];
+        }
+    }
+
+    Polynomialn<P, batch> p;
+    for (int i = 0; i < P::n; i++)
+        for (int j=0;j<batch;j++)
+            p[j][i] = static_cast<typename P::T>(std::round(phase[j][i] / P::delta)) %
+               P::plain_modulus;
+    return p;
+}
+
 
 template <class P>
 void SampleExtractIndex(TLWE<P> &tlwe, const TRLWE<P> &trlwe, const int index)
