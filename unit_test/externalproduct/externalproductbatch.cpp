@@ -8,64 +8,44 @@ using namespace TFHEpp;
 
 int main()
 {
-#ifdef NOT_
     random_device seed_gen;
     default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> binary(0, 1);
     constexpr int batch = 2;
     cout << "test p=1" << endl;
 
-    cout << "lvl1" << endl;
+    cout << "lvl1 batch " << batch << endl;
     {
         lweKey key;
+        BooleanArrayn<lvl1param::n, batch> p;
 
-        array<bool, lvl1param::n> p;
-        for (bool &i : p) i = (binary(engine) > 0);
+        for (int j = 0; j < batch; j++)
+            for (int i = 0; i < lvl1param::n; i++)
+                p[j][i] = (binary(engine) > 0);
+
         Polynomialn<lvl1param, batch> pmu;
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
-                pmu[j][i] = p[i] ? lvl1param::mu : -lvl1param::mu;
+                pmu[j][i] = p[j][i] ? lvl1param::mu : -lvl1param::mu;
 
-        TRLWEn<lvl1param, batch> c = trlweSymEncrypt<lvl1param>(pmu, key.lvl1);
+        TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
 
-        const Polynomial<TFHEpp::lvl1param> plainpoly = {
+        const Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
             static_cast<typename lvl1param::T>(1)};
 
-        TRGSWFFT<lvl1param> trgswfft =
-            trgswfftSymEncrypt<lvl1param>(plainpoly, key.lvl1);
-        trgswfftExternalProduct<lvl1param>(c, c, trgswfft);
-        array<bool, lvl1param::n> p2 = trlweSymDecrypt<lvl1param>(c, key.lvl1);
-        for (int i = 0; i < lvl1param::n; i++) {
-            c_assert(p[i] == p2[i]);
-        }
+        TRGSWFFTn<lvl1param, batch> trgswfft =
+            trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
+        trgswfftExternalProductbatch<lvl1param, batch>(c, c, trgswfft);
+        BooleanArrayn<lvl1param::n, batch> p2 = trlweSymDecryptbatch<lvl1param, batch>(c, key.lvl1);
+        for (int j = 0; j < batch; j++)
+            for (int i = 0; i < lvl1param::n; i++) {
+                c_assert(p[j][i] == p2[j][i]);
+            }
     }
     cout << "Passed" << endl;
 
-    cout << "test p=-1" << endl;
 
-    cout << "lvl1" << endl;
-    {
-        lweKey key;
 
-        array<bool, lvl1param::n> p;
-        for (bool &i : p) i = binary(engine) > 0;
-        array<typename TFHEpp::lvl1param::T, lvl1param::n> pmu;
-        for (int i = 0; i < lvl1param::n; i++)
-            pmu[i] = p[i] ? lvl1param::mu : -lvl1param::mu;
-        TRLWE<lvl1param> c = trlweSymEncrypt<lvl1param>(pmu, key.lvl1);
 
-        const Polynomial<TFHEpp::lvl1param> plainpoly = {
-            static_cast<typename lvl1param::T>(-1)};
 
-        TRGSWFFT<lvl1param> trgswfft =
-            trgswfftSymEncrypt<lvl1param>(plainpoly, key.lvl1);
-        trgswfftExternalProduct<lvl1param>(c, c, trgswfft);
-        array<bool, lvl1param::n> p2 = trlweSymDecrypt<lvl1param>(c, key.lvl1);
-        for (int i = 0; i < lvl1param::n; i++) {
-            c_assert(p[i] == !p2[i]);
-        }
-
-    }
-    cout << "Passed" << endl;
-#endif
 }
