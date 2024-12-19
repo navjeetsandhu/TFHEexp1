@@ -80,7 +80,25 @@ template <class P, int batch>
 inline void Decompositionbatch(DecomposedPolynomialn<P, batch> &decpoly,
                           const Polynomialn<P, batch> &poly, typename P::T randbits = 0)
 {
-    for (int i = 0; i < batch; i++)
-       Decomposition(decpoly[i], poly[i], randbits);
+    constexpr typename P::T offset = offsetgen<P>();
+    constexpr uint32_t roundoffsetBit = std::numeric_limits<typename P::T>::digits - P::l * P::Bgbit - 1;
+    constexpr typename P::T roundoffset = 1ULL << roundoffsetBit;
+    constexpr typename P::T totaloffset = offset + roundoffset;
+
+    constexpr auto mask = static_cast<typename P::T>((1ULL << P::Bgbit) - 1);
+    constexpr typename P::T halfBg = (1ULL << (P::Bgbit - 1));
+    constexpr uint32_t maxDigits = std::numeric_limits<typename P::T>::digits;
+
+    for (int j = 0; j < batch; j++) {
+        for (int i = 0; i < P::n; i++) {
+            auto valuePlusOffset = poly[j][i] + totaloffset;
+            for (int ii = 0; ii < P::l; ii++) {
+                auto digitsToShift = maxDigits - (ii + 1) * P::Bgbit;
+                auto shiftedValue = valuePlusOffset >> digitsToShift;
+                auto maskedValue = shiftedValue & mask;
+                decpoly[ii][j][i] = maskedValue - halfBg;
+            }
+        }
+    }
 }
 }  // namespace TFHEpp

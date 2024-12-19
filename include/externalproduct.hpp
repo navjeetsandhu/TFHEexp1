@@ -53,12 +53,12 @@ void trgswfftExternalProductbatch(TRLWEn<P, batch> &res, const TRLWEn<P, batch> 
     for (int i = 1; i < P::l; i++) {
         TwistIFFTbatch<P, batch>(decpolyfft, decpoly[i]);
         for (int m = 0; m < P::k + 1; m++)
-            FMAInFDbatch<P::n, batch>(restrlwefft[m], decpolyfft, trgswfft[i][m]);
+            FMAInFDbatch<P, batch>(restrlwefft[m], decpolyfft, trgswfft[i][m]);
     }
     for (int k = 1; k < P::k + 1; k++) {
         Decompositionbatch<P, batch>(decpoly, trlwe[k]);
         for (int i = 0; i < P::l; i++) {
-            TwistIFFTbatch<P>(decpolyfft, decpoly[i]);
+            TwistIFFTbatch<P, batch>(decpolyfft, decpoly[i]);
             for (int m = 0; m < P::k + 1; m++)
                 FMAInFDbatch<P, batch>(restrlwefft[m], decpolyfft,
                               trgswfft[i + k * P::l][m]);
