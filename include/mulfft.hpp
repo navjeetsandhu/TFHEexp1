@@ -121,8 +121,8 @@ template <class P, int batch>
 inline void FMAInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P, batch> &a,
                          const PolynomialInFDn<P, batch> &b)
 {
-    for (int i=0; i< batch; i++) {
-        FMAInFD<P::n, batch>(res[i], a[i], b[i]);
+    for (int j=0; j< batch; j++) {
+        FMAInFD<P::n>(res[j], a[j], b[j]);
     }
 }
 
