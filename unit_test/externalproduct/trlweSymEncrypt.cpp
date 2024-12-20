@@ -32,7 +32,7 @@ int main()
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++) {
                 cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
-                //c_assert(p[j][i] == p2[j][i]);
+                c_assert(p[j][i] == p2[j][i]);
             }
     }
     cout << "Passed" << endl;
