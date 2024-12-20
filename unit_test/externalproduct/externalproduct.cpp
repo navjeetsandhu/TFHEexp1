@@ -28,6 +28,10 @@ int main()
         const Polynomial<TFHEpp::lvl1param> plainpoly = {
             static_cast<typename lvl1param::T>(1)};
 
+        for (int i = 0; i < lvl1param::n; i++)
+            cout << i << " " << plainpoly[i] <<  endl;
+
+
         TRGSWFFT<lvl1param> trgswfft =
             trgswfftSymEncrypt<lvl1param>(plainpoly, key.lvl1);
         trgswfftExternalProduct<lvl1param>(c, c, trgswfft);
