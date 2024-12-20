@@ -35,7 +35,7 @@ int main()
 
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
-                cout << j << " " << i << " " << plainpoly[j][i] <<  << endl;
+                cout << j << " " << i << " " << plainpoly[j][i] <<  endl;
 
         TRGSWFFTn<lvl1param, batch> trgswfft =
             trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
