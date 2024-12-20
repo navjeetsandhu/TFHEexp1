@@ -28,8 +28,8 @@ int main()
         const Polynomial<TFHEpp::lvl1param> plainpoly = {
             static_cast<typename lvl1param::T>(1)};
 
-        for (int i = 0; i < lvl1param::n; i++)
-            cout << i << " " << plainpoly[i] <<  endl;
+        //for (int i = 0; i < lvl1param::n; i++)
+        //    cout << i << " " << plainpoly[i] <<  endl;
 
 
         TRGSWFFT<lvl1param> trgswfft =
