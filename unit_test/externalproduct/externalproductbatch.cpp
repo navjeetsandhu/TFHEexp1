@@ -33,14 +33,19 @@ int main()
         const Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
             static_cast<typename lvl1param::T>(1)};
 
+        cout << j << " " << i << " " << plainpoly[j][i] <<  << endl;
+
         TRGSWFFTn<lvl1param, batch> trgswfft =
             trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
         trgswfftExternalProductbatch<lvl1param, batch>(c, c, trgswfft);
+
+
+
         BooleanArrayn<lvl1param::n, batch> p2 = trlweSymDecryptbatch<lvl1param, batch>(c, key.lvl1);
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++) {
-                cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
-                //c_assert(p[j][i] == p2[j][i]);
+                //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
+                c_assert(p[j][i] == p2[j][i]);
             }
     }
     cout << "Passed" << endl;
