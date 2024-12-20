@@ -36,20 +36,19 @@ int main()
         for (int j = 0; j < batch; j++)
             plainpoly[j][0] = 1;
 
-        for (int j = 0; j < batch; j++)
-            for (int i = 0; i < lvl1param::n; i++)
-                cout << j << " " << i << " " << plainpoly[j][i] <<  endl;
+        //for (int j = 0; j < batch; j++)
+        //    for (int i = 0; i < lvl1param::n; i++)
+         //       cout << j << " " << i << " " << plainpoly[j][i] <<  endl;
 
         TRGSWFFTn<lvl1param, batch> trgswfft =
             trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
         trgswfftExternalProductbatch<lvl1param, batch>(c, c, trgswfft);
 
-
-
+        
         BooleanArrayn<lvl1param::n, batch> p2 = trlweSymDecryptbatch<lvl1param, batch>(c, key.lvl1);
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++) {
-                //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
+                cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
                 c_assert(p[j][i] == p2[j][i]);
             }
     }
