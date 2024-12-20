@@ -30,12 +30,12 @@ int main()
 
         TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
 
-        const Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
+        Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
             static_cast<typename lvl1param::T>(0)};
 
         for (int j = 0; j < batch; j++)
             plainpoly[j][0] = 1;
-        
+
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
                 cout << j << " " << i << " " << plainpoly[j][i] <<  endl;
