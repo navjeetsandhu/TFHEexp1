@@ -65,7 +65,7 @@ int main()
         trgswfftExternalProduct<lvl1param>(c, c, trgswfft);
         array<bool, lvl1param::n> p2 = trlweSymDecrypt<lvl1param>(c, key.lvl1);
         for (int i = 0; i < lvl1param::n; i++) {
-            cout << p[i] << "  " << p2[i] << endl;
+            //cout << p[i] << "  " << p2[i] << endl;
             c_assert(p[i] == !p2[i]);
         }
 
