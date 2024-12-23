@@ -197,6 +197,7 @@ inline void PolynomialMulByXai(Polynomial<P> &res, const Polynomial<P> &poly,
     }
 }
 
+/*
 template <class P, int batch>
 inline void PolynomialMulByXaibatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &poly,
                                const typename P::T a)
@@ -217,7 +218,7 @@ inline void PolynomialMulByXaibatch(Polynomialn<P, batch> &res, const Polynomial
         }
     }
 }
-
+*/
 
 template <class P>
 inline void PolynomialMulByXaiMinusOne(Polynomial<P> &res,
@@ -235,6 +236,7 @@ inline void PolynomialMulByXaiMinusOne(Polynomial<P> &res,
     }
 }
 
+/*
 template <class P, int batch>
 inline void PolynomialMulByXaiMinusOnebatch(Polynomialn<P, batch> &res,
                                        const Polynomialn<P, batch> &poly,
@@ -254,7 +256,7 @@ inline void PolynomialMulByXaiMinusOnebatch(Polynomialn<P, batch> &res,
         }
     }
 }
-
+*/
 
 // calcurate τ_d
 template <class P>
@@ -273,7 +275,7 @@ inline void Automorphism(Polynomial<P> &res, const Polynomial<P> &poly,
     }
 }
 
-
+/*
 template <class P, int batch>
 inline void Automorphismbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &poly,
                          const uint d)
@@ -291,5 +293,5 @@ inline void Automorphismbatch(Polynomialn<P, batch> &res, const Polynomialn<P, b
         }
     }
 }
-
+*/
 }  // namespace TFHEpp
