@@ -54,13 +54,13 @@ TRGSWn<P, batch> trgswSymEncryptbatch(const Polynomialn<P, batch> &p, const doub
                          const Key<P> &key)
 {
     constexpr std::array<typename P::T, P::l> h = hgen<P>();
-
+    std::cout << " trgswSymEncryptbatch: " << std::endl;
     TRGSWn<P, batch> trgsw;
     for (TRLWEn<P, batch> &trlwe : trgsw) trlwe = trlweSymEncryptZerobatch<P, batch>(alpha, key);
     for (int i = 0; i < P::l; i++)
         for (int k = 0; k < P::k + 1; k++)
             for (int b = 0; b < batch; b++) {
-                std::cout << ".";
+                std::cout << b << " ";
                 for (int j = 0; j < P::n; j++)
                     trgsw[i + k * P::l][k][b][j] +=
                         static_cast<typename P::T>(p[b][j]) * h[i];
