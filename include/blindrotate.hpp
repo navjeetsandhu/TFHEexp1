@@ -17,6 +17,7 @@ void BlindRotate(TRLWE<typename P::targetP> &res,
                  const BootstrappingKeyFFT<P> &bkfft,
                  const Polynomial<typename P::targetP> &testvector)
 {
+    cout << "b " ;
     constexpr uint32_t bitwidth = bits_needed<num_out - 1>();
     const uint32_t bLong = 2 * P::targetP::n -
                        ((tlwe[P::domainP::k * P::domainP::n] >>
@@ -35,6 +36,7 @@ void BlindRotate(TRLWE<typename P::targetP> &res,
             (std::numeric_limits<typename P::domainP::T>::digits - 1 -
              P::targetP::nbit + bitwidth)
                 << bitwidth;
+        cout << " along " << aLong << " ";
         if (aLong == 0) continue;
         // Do not use CMUXFFT to avoid unnecessary copy.
         CMUXFFTwithPolynomialMulByXaiMinusOne<P>(res, bkfft[i], aLong);
@@ -47,6 +49,7 @@ void BlindRotate(TRLWE<typename P::targetP> &res,
                  const BootstrappingKeyFFT<P> &bkfft,
                  const TRLWE<typename P::targetP> &testvector)
 {
+    cout << "B " ;
     constexpr uint32_t bitwidth = bits_needed<num_out - 1>();
     const uint32_t bLong = 2 * P::targetP::n -
                        ((tlwe[P::domainP::k * P::domainP::n] >>
@@ -65,6 +68,7 @@ void BlindRotate(TRLWE<typename P::targetP> &res,
             (std::numeric_limits<typename P::domainP::T>::digits - 1 -
              P::targetP::nbit + bitwidth)
                 << bitwidth;
+        cout << " aLong " << aLong << " ";
         if (aLong == 0) continue;
         // Do not use CMUXFFT to avoid unnecessary copy.
         CMUXFFTwithPolynomialMulByXaiMinusOne<typename P::targetP>(res,
