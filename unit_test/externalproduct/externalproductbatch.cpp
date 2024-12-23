@@ -11,7 +11,7 @@ int main()
     random_device seed_gen;
     default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> binary(0, 1);
-    constexpr int batch = 2;
+    constexpr int batch = 27;
     cout << "test p=1: lvl1 batch" << endl;
 
     {
