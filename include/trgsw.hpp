@@ -2,7 +2,7 @@
 
 #include <array>
 #include <cstdint>
-
+#include <iostream>
 #include "mulfft.hpp"
 #include "params.hpp"
 #include "trlwe.hpp"
@@ -59,9 +59,12 @@ TRGSWn<P, batch> trgswSymEncryptbatch(const Polynomialn<P, batch> &p, const doub
     for (TRLWEn<P, batch> &trlwe : trgsw) trlwe = trlweSymEncryptZerobatch<P, batch>(alpha, key);
     for (int i = 0; i < P::l; i++)
         for (int k = 0; k < P::k + 1; k++)
-            for (int b = 0; b < batch; b++)
+            for (int b = 0; b < batch; b++) {
+                std::cout << ".";
                 for (int j = 0; j < P::n; j++)
-                    trgsw[i + k * P::l][k][b][j] += static_cast<typename P::T>(p[b][j]) * h[i];
+                    trgsw[i + k * P::l][k][b][j] +=
+                        static_cast<typename P::T>(p[b][j]) * h[i];
+            }
 
     return trgsw;
 }
