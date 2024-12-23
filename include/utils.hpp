@@ -197,29 +197,6 @@ inline void PolynomialMulByXai(Polynomial<P> &res, const Polynomial<P> &poly,
     }
 }
 
-/*
-template <class P, int batch>
-inline void PolynomialMulByXaibatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &poly,
-                               const typename P::T a)
-{
-    if (a == 0)
-        res = poly;
-    else if (a < P::n) {
-        for (int j=0;j<batch;j++) {
-            for (int i = 0; i < a; i++) res[j][i] = -poly[j][i - a + P::n];
-            for (int i = a; i < P::n; i++) res[j][i] = poly[j][i - a];
-        }
-    }
-    else {
-        const typename P::T aa = a - P::n;
-        for (int j=0;j<batch;j++) {
-            for (int i = 0; i < aa; i++) res[j][i] = poly[j][i - aa + P::n];
-            for (int i = aa; i < P::n; i++) res[j][i] = -poly[j][i - aa];
-        }
-    }
-}
-*/
-
 template <class P>
 inline void PolynomialMulByXaiMinusOne(Polynomial<P> &res,
                                        const Polynomial<P> &poly,
@@ -235,28 +212,6 @@ inline void PolynomialMulByXaiMinusOne(Polynomial<P> &res,
         for (int i = aa; i < P::n; i++) res[i] = -poly[i - aa] - poly[i];
     }
 }
-
-/*
-template <class P, int batch>
-inline void PolynomialMulByXaiMinusOnebatch(Polynomialn<P, batch> &res,
-                                       const Polynomialn<P, batch> &poly,
-                                       const typename P::T a)
-{
-    if (a < P::n) {
-        for (int j=0;j<batch;j++) {
-            for (int i = 0; i < a; i++) res[i] = -poly[i - a + P::n] - poly[i];
-            for (int i = a; i < P::n; i++) res[i] = poly[i - a] - poly[i];
-        }
-    }
-    else {
-        const typename P::T aa = a - P::n;
-        for (int j=0;j<batch;j++) {
-            for (int i = 0; i < aa; i++) res[i] = poly[i - aa + P::n] - poly[i];
-            for (int i = aa; i < P::n; i++) res[i] = -poly[i - aa] - poly[i];
-        }
-    }
-}
-*/
 
 // calcurate τ_d
 template <class P>
@@ -275,23 +230,4 @@ inline void Automorphism(Polynomial<P> &res, const Polynomial<P> &poly,
     }
 }
 
-/*
-template <class P, int batch>
-inline void Automorphismbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &poly,
-                         const uint d)
-{
-    res = {};
-    constexpr uint Nmask = (1ULL << (P::nbit)) - 1;
-    constexpr uint signmask = 1ULL << (P::nbit);
-    for (int j=0;j<batch;j++) {
-        for (uint i = 0; i < P::n; i++) {
-            const uint index = i * d;
-            if (index & signmask)
-                res[index & Nmask] -= poly[i];
-            else
-                res[index & Nmask] += poly[i];
-        }
-    }
-}
-*/
 }  // namespace TFHEpp
