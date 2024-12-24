@@ -49,7 +49,7 @@ TRLWEn<P, batch> trlweSymEncryptZerobatch(const double alpha, const Key<P> &key)
             for (int i = 0; i < dimension; i++) (*cPtr)[k_max][j][i] += temp[j][i];
         }
     }
-    return c;
+    return (*cPtr);
 }
 
 template <class P>
