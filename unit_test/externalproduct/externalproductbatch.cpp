@@ -6,7 +6,7 @@
 using namespace std;
 using namespace TFHEpp;
 
-constexpr int batch = 27;
+constexpr int batch = 30;
 BooleanArrayn<lvl1param::n, batch> p;
 Polynomialn<lvl1param, batch> pmu;
 Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
@@ -22,24 +22,22 @@ int main()
 
     {
         lweKey key;
-
-
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
                 p[j][i] = (binary(engine) > 0);
 
-
+        cout << "a" << endl;
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
                 pmu[j][i] = p[j][i] ? lvl1param::mu : -lvl1param::mu;
 
         TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
-
-
+        cout << "b" << endl;
 
         for (int j = 0; j < batch; j++)
             plainpoly[j][0] = 1;
 
+        cout << "c" << endl;
         //for (int j = 0; j < batch; j++)
         //    for (int i = 0; i < lvl1param::n; i++)
          //       cout << j << " " << i << " " << plainpoly[j][i] <<  endl;
@@ -47,7 +45,6 @@ int main()
         TRGSWFFTn<lvl1param, batch> trgswfft =
             trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
         trgswfftExternalProductbatch<lvl1param, batch>(c, c, trgswfft);
-
 
         BooleanArrayn<lvl1param::n, batch> p2 = trlweSymDecryptbatch<lvl1param, batch>(c, key.lvl1);
         for (int j = 0; j < batch; j++)
