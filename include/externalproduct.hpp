@@ -1,5 +1,5 @@
 #pragma once
-
+#include <memory>
 #include <array>
 #include <cstdint>
 #include "mulfft.hpp"
@@ -43,28 +43,31 @@ template <class P, int batch>
 void trgswfftExternalProductbatch(TRLWEn<P, batch> &res, const TRLWEn<P, batch> &trlwe,
                              const TRGSWFFTn<P, batch> &trgswfft)
 {
-    alignas(64) DecomposedPolynomialn<P, batch> decpoly;
-    Decompositionbatch<P, batch>(decpoly, trlwe[0]);
-    alignas(64) PolynomialInFDn<P, batch> decpolyfft;
-    TwistIFFTbatch<P, batch>(decpolyfft, decpoly[0]);
-    alignas(64) TRLWEInFDn<P, batch> restrlwefft;
+    alignas(64) std::unique_ptr<DecomposedPolynomialn<P, batch>> decpolyPtr = std::make_unique<DecomposedPolynomialn<P, batch>>();
+    Decompositionbatch<P, batch>((*decpolyPtr), trlwe[0]);
+
+    alignas(64) std::unique_ptr<PolynomialInFDn<P, batch>> decpolyfftPtr = std::make_unique<PolynomialInFDn<P, batch>>();
+    TwistIFFTbatch<P, batch>((*decpolyfftPtr), (*decpolyPtr)[0]);
+
+    alignas(64) std::unique_ptr<TRLWEInFDn<P, batch>> restrlwefftPtr = std::make_unique<TRLWEInFDn<P, batch>>();
+
     for (int m = 0; m < P::k + 1; m++)
-        MulInFDbatch<P, batch>(restrlwefft[m], decpolyfft, trgswfft[0][m]);
+        MulInFDbatch<P, batch>((*restrlwefftPtr)[m], (*decpolyfftPtr), trgswfft[0][m]);
     for (int i = 1; i < P::l; i++) {
-        TwistIFFTbatch<P, batch>(decpolyfft, decpoly[i]);
+        TwistIFFTbatch<P, batch>((*decpolyfftPtr), (*decpolyPtr)[i]);
         for (int m = 0; m < P::k + 1; m++)
-            FMAInFDbatch<P, batch>(restrlwefft[m], decpolyfft, trgswfft[i][m]);
+            FMAInFDbatch<P, batch>((*restrlwefftPtr)[m], (*decpolyfftPtr), trgswfft[i][m]);
     }
     for (int k = 1; k < P::k + 1; k++) {
-        Decompositionbatch<P, batch>(decpoly, trlwe[k]);
+        Decompositionbatch<P, batch>((*decpolyPtr), trlwe[k]);
         for (int i = 0; i < P::l; i++) {
-            TwistIFFTbatch<P, batch>(decpolyfft, decpoly[i]);
+            TwistIFFTbatch<P, batch>((*decpolyfftPtr), (*decpolyPtr)[i]);
             for (int m = 0; m < P::k + 1; m++)
-                FMAInFDbatch<P, batch>(restrlwefft[m], decpolyfft,
+                FMAInFDbatch<P, batch>((*restrlwefftPtr)[m], (*decpolyfftPtr),
                               trgswfft[i + k * P::l][m]);
         }
     }
-    for (int k = 0; k < P::k + 1; k++) TwistFFTbatch<P, batch>(res[k], restrlwefft[k]);
+    for (int k = 0; k < P::k + 1; k++) TwistFFTbatch<P, batch>(res[k], (*restrlwefftPtr)[k]);
 }
 
 

@@ -32,7 +32,7 @@ int main()
                 pmu[j][i] = p[j][i] ? lvl1param::mu : -lvl1param::mu;
 
         TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
-        cout << "b" << endl;
+
 
         for (int j = 0; j < batch; j++)
             plainpoly[j][0] = 1;
@@ -44,9 +44,11 @@ int main()
 
         TRGSWFFTn<lvl1param, batch> trgswfft =
             trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
+        cout << "d" << endl;
         trgswfftExternalProductbatch<lvl1param, batch>(c, c, trgswfft);
-
+        cout << "e" << endl;
         BooleanArrayn<lvl1param::n, batch> p2 = trlweSymDecryptbatch<lvl1param, batch>(c, key.lvl1);
+        cout << "f" << endl;
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++) {
                 //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
