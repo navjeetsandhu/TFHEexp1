@@ -6,7 +6,7 @@
 using namespace std;
 using namespace TFHEpp;
 
-constexpr int batch = 30;
+constexpr int batch = 27;
 BooleanArrayn<lvl1param::n, batch> p;
 Polynomialn<lvl1param, batch> pmu;
 Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
