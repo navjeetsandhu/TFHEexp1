@@ -48,25 +48,25 @@ TRGSW<P> trgswSymEncrypt(const Polynomial<P> &p, const double alpha,
     return trgsw;
 }
 
-TRGSWn<P, batch> trgsWn;
+
 template <class P, int batch>
 TRGSWn<P, batch> trgswSymEncryptbatch(const Polynomialn<P, batch> &p, const double alpha,
                          const Key<P> &key)
 {
     constexpr std::array<typename P::T, P::l> h = hgen<P>();
     //std::cout << " trgswSymEncryptbatch: " << std::endl;
-
-    for (TRLWEn<P, batch> &trlwe : trgsWn) trlwe = trlweSymEncryptZerobatch<P, batch>(alpha, key);
+    std::unique_ptr<TRGSWn<P, batch>> trgsWnPtr = std::make_unique<TRGSWn<P, batch>>();
+    for (TRLWEn<P, batch> &trlwe : (*trgsWnPtr)) trlwe = trlweSymEncryptZerobatch<P, batch>(alpha, key);
     for (int i = 0; i < P::l; i++)
         for (int k = 0; k < P::k + 1; k++)
             for (int b = 0; b < batch; b++) {
                 //std::cout << b << " ";
                 for (int j = 0; j < P::n; j++)
-                    trgsWn[i + k * P::l][k][b][j] +=
+                    (*trgsWnPtr)[i + k * P::l][k][b][j] +=
                         static_cast<typename P::T>(p[b][j]) * h[i];
             }
 
-    return trgsWn;
+    return (*trgsWnPtr);
 }
 
 template <class P>
