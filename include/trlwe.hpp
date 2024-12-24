@@ -43,10 +43,10 @@ TRLWEn<P, batch> trlweSymEncryptZerobatch(const double alpha, const Key<P> &key)
         std::array<typename P::T, dimension> partkey;
         for (int i = 0; i < dimension; i++) partkey[i] = key[k * dimension + i];
 
-        Polynomialn<P, batch> temp;
+        std::unique_ptr<Polynomialn<P, batch>> tempPtr = std::make_unique<Polynomialn<P, batch>>();
         for (int j=0;j<batch;j++) {
-            PolyMul<P>(temp[j], (*cPtr)[k][j], partkey);
-            for (int i = 0; i < dimension; i++) (*cPtr)[k_max][j][i] += temp[j][i];
+            PolyMul<P>((*tempPtr)[j], (*cPtr)[k][j], partkey);
+            for (int i = 0; i < dimension; i++) (*cPtr)[k_max][j][i] += (*tempPtr)[j][i];
         }
     }
     return (*cPtr);
