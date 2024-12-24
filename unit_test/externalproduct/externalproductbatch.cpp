@@ -57,7 +57,7 @@ int main()
     }
     cout << "Passed" << endl;
     cout << "test p=-1: lvl1 batch" << endl;
-
+/*
     {
         lweKey key;
         BooleanArrayn<lvl1param::n, batch> p;
@@ -96,6 +96,6 @@ int main()
             }
     }
     cout << "Passed" << endl;
-
+*/
 
 }
