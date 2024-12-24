@@ -29,7 +29,7 @@ TRLWE<P> trlweSymEncryptZero(const double alpha, const Key<P> &key)
 template <class P, int batch>
 TRLWEn<P, batch> trlweSymEncryptZerobatch(const double alpha, const Key<P> &key)
 {
-    std::cout << " trlweSymEncryptZerobatch ";
+    //std::cout << " trlweSymEncryptZerobatch ";
         constexpr auto numeric_limit = std::numeric_limits<typename P::T>::max(); // i.e. 0xFFFFFFFF
     constexpr auto dimension = P::n; // i.e. 1024
     constexpr auto k_max = P::k;  // i.e 1
@@ -280,7 +280,7 @@ Polynomial<P> trlwePhase(const TRLWE<P> &c, const Key<P> &key)
 template <class P, int batch>
 Polynomialn<P, batch> trlwePhasebatch(const TRLWEn<P, batch> &c, const Key<P> &key)
 {
-    std::cout << " trlwePhasebatch ";
+    //std::cout << " trlwePhasebatch ";
     Polynomialn<P, batch> phase = c[P::k];
     for (int k = 0; k < P::k; k++) {
         alignas(64) std::unique_ptr<Polynomialn<P, batch>> mulresPtr = std::make_unique<Polynomialn<P, batch>>();

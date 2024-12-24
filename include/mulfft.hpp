@@ -9,7 +9,7 @@ namespace TFHEpp {
 template <class P, int batch>
 inline void TwistFFTbatch(Polynomialn<P, batch> &res, const PolynomialInFDn<P, batch> &a)
 {
-    std::cout << " b " << batch << " ";
+    //std::cout << " b " << batch << " ";
     if constexpr (std::is_same_v<P, lvl1param>)
         TwistFpgaFFTbatch(res[0].data(), a[0].data(), batch);
     else
@@ -19,7 +19,7 @@ inline void TwistFFTbatch(Polynomialn<P, batch> &res, const PolynomialInFDn<P, b
 template <class P, int batch>
 inline void TwistIFFTbatch(PolynomialInFDn<P, batch> &res, const Polynomialn<P, batch> &a)
 {
-    std::cout << " B " << batch << " ";
+    //std::cout << " B " << batch << " ";
     if constexpr (std::is_same_v<P, lvl1param>)
         TwistFpgaIFFTbatch(res[0].data(), a[0].data(), batch);
     else
@@ -42,7 +42,7 @@ inline void TwistFFT(Polynomial<P> &res, const PolynomialInFD<P> &a)
 template <class P>
 inline void TwistFFTrescale(Polynomial<P> &res, const PolynomialInFD<P> &a)
 {
-    std::cout << " f ";
+    std::cout << " z ";
     if constexpr (std::is_same_v<P, lvl1param>)
         TwistFpgaFFTrescale<P>(res, a);
     else if constexpr (std::is_same_v<P, lvl2param>)
@@ -54,7 +54,7 @@ inline void TwistFFTrescale(Polynomial<P> &res, const PolynomialInFD<P> &a)
 template <class P>
 inline void TwistIFFT(PolynomialInFD<P> &res, const Polynomial<P> &a)
 {
-    std::cout << " i ";
+    std::cout << " o ";
     if constexpr (std::is_same_v<P, lvl1param>)
         TwistFpgaIFFT<P::n>(res, a);
     else if constexpr (std::is_same_v<typename P::T, uint64_t>)
@@ -77,9 +77,8 @@ template <class P, int batch>
 inline void MulInFDbatch(PolynomialInFDn<P, batch> &res,
                          const PolynomialInFDn<P, batch> &b)
 {
-    for (int i=0; i< batch; i++) {
+    for (int i=0; i< batch; i++)
         MulInFD<P::n>(res[i], b[i]);
-    }
 }
 
 
@@ -155,7 +154,7 @@ template <class P, int batch>
 inline void PolyMulFFTbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &a,
                        const Polynomialn<P, batch> &b)
 {
-    std::cout << " PolyMulFFTbatch ";
+    //std::cout << " PolyMulFFTbatch ";
     alignas(64) PolynomialInFDn<P, batch> ffta;
     TwistIFFTbatch<P, batch>(ffta, a);
     alignas(64) PolynomialInFDn<P, batch> fftb;
