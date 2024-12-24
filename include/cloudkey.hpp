@@ -5,7 +5,7 @@
 #include <cereal/types/memory.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/vector.hpp>
-
+#include <iostream>
 #include "key.hpp"
 #include "params.hpp"
 #include "tlwe.hpp"
@@ -251,6 +251,7 @@ void subprivkskgen(SubsetPrivateKeySwitchingKey<P>& privksk,
 template <class P>
 relinKeyFFT<P> relinKeyFFTgen(const Key<P>& key)
 {
+    std::cout << " relinKeyFFTgen ";
     relinKey<P> relinkey = relinKeygen<P>(key);
     relinKeyFFT<P> relinkeyfft;
     for (int i = 0; i < P::l; i++)
