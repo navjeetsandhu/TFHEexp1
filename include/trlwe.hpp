@@ -46,7 +46,7 @@ TRLWEn<P, batch> trlweSymEncryptZerobatch(const double alpha, const Key<P> &key)
         Polynomialn<P, batch> temp;
         for (int j=0;j<batch;j++) {
             PolyMul<P>(temp[j], (*cPtr)[k][j], partkey);
-            for (int i = 0; i < dimension; i++) c[k_max][j][i] += temp[j][i];
+            for (int i = 0; i < dimension; i++) (*cPtr)[k_max][j][i] += temp[j][i];
         }
     }
     return c;
