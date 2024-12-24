@@ -6,7 +6,7 @@
 #include "params.hpp"
 #include "trlwe.hpp"
 #include "decomposition.hpp"
-
+#include <iostream>
 
 namespace TFHEpp {
 
@@ -14,6 +14,7 @@ template <class P>
 void trgswfftExternalProduct(TRLWE<P> &res, const TRLWE<P> &trlwe,
                              const TRGSWFFT<P> &trgswfft)
 {
+    std::cout << "trgswfftExternalProduct";
     alignas(64) DecomposedPolynomial<P> decpoly;
     Decomposition<P>(decpoly, trlwe[0]);
     alignas(64) PolynomialInFD<P> decpolyfft;
@@ -43,6 +44,7 @@ template <class P, int batch>
 void trgswfftExternalProductbatch(TRLWEn<P, batch> &res, const TRLWEn<P, batch> &trlwe,
                              const TRGSWFFTn<P, batch> &trgswfft)
 {
+    std::cout << "trgswfftExternalProductbatch";
     alignas(64) std::unique_ptr<DecomposedPolynomialn<P, batch>> decpolyPtr = std::make_unique<DecomposedPolynomialn<P, batch>>();
     Decompositionbatch<P, batch>((*decpolyPtr), trlwe[0]);
 
