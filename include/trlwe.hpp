@@ -283,13 +283,14 @@ Polynomialn<P, batch> trlwePhasebatch(const TRLWEn<P, batch> &c, const Key<P> &k
     std::cout << " trlwePhasebatch ";
     Polynomialn<P, batch> phase = c[P::k];
     for (int k = 0; k < P::k; k++) {
-        for (int j=0;j<batch;j++) {
-            Polynomial<P> mulres;
-            std::array<typename P::T, P::n> partkey;
-            for (int i = 0; i < P::n; i++) partkey[i] = key[k * P::n + i];
-            PolyMul<P>(mulres, c[k][j], partkey);
-            for (int i = 0; i < P::n; i++) phase[j][i] -= mulres[i];
-        }
+        alignas(64) std::unique_ptr<Polynomialn<P, batch>> mulresPtr = std::make_unique<Polynomialn<P, batch>>();
+        std::array<typename P::T, P::n> partkey;
+        for (int i = 0; i < P::n; i++) partkey[i] = key[k * P::n + i];
+        PolyMulHalfbatch<P, batch>(*mulresPtr, c[k], partkey);
+
+        for (int j=0;j<batch;j++)
+            for (int i = 0; i < P::n; i++) phase[j][i] -= (*mulresPtr)[j][i];
+
     }
     return phase;
 }
