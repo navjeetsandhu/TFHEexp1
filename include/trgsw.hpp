@@ -129,6 +129,7 @@ template <class P>
 TRGSWFFT<P> trgswfftSymEncrypt(const Polynomial<P> &p, const double alpha,
                                const Key<P> &key)
 {
+    std::cout << " trgswfftSymEncrypt ";
     TRGSW<P> trgsw = trgswSymEncrypt<P>(p, alpha, key);
     return ApplyFFT2trgsw<P>(trgsw);
 }
