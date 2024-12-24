@@ -1,6 +1,8 @@
 #pragma once
 #include "trgsw.hpp"
 #include "externalproduct.hpp"
+#include <iostream>
+
 namespace TFHEpp {
 template <class P>
 void CMUXFFT(TRLWE<P> &res, const TRGSWFFT<P> &cs, const TRLWE<P> &c1,
@@ -16,8 +18,8 @@ void CMUXFFT(TRLWE<P> &res, const TRGSWFFT<P> &cs, const TRLWE<P> &c1,
 template <class P>
 TRGSWFFT<P> TRGSWFFTOneGen()
 {
+    std::cout << " TRGSWFFTOneGen ";
     constexpr std::array<typename P::T, P::l> h = hgen<P>();
-
     TRGSW<P> trgsw = {};
     for (int i = 0; i < P::l; i++) {
         for (int k = 0; k < P::k + 1; k++) {
