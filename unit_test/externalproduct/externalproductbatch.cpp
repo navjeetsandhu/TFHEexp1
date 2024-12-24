@@ -6,7 +6,7 @@
 using namespace std;
 using namespace TFHEpp;
 
-constexpr int batch = 27;
+constexpr int batch = 35;
 BooleanArrayn<lvl1param::n, batch> p;
 Polynomialn<lvl1param, batch> pmu;
 Polynomialn<TFHEpp::lvl1param, batch> plainpoly = {
@@ -33,7 +33,7 @@ int main()
 
         TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
 
-
+        cout << "b" << endl;
         for (int j = 0; j < batch; j++)
             plainpoly[j][0] = 1;
 
