@@ -2,6 +2,7 @@
 #include "mult_fft_fpga.hpp"
 #include <fft_processor_fftw.h>
 #include <iostream>
+#include <memory>
 
 namespace TFHEpp {
 
@@ -201,6 +202,21 @@ inline void PolyMulbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch>
         static_assert(false_v<typename P::T>, "PolyMulbatch!");
 
 }
+
+template <class P, int batch>
+inline void PolyMulHalfbatch(Polynomialn<P, batch> &res, const Polynomialn<P, batch> &a,
+                         const Polynomial<P> &b)
+{
+    alignas(64) std::unique_ptr<Polynomialn<P, batch>> bPtr = std::make_unique<Polynomialn<P, batch>>();
+
+    for (int j= 0; j< batch;j++)
+        for (int i = 0; i < P::n; i++)
+            (*bPtr)[j][i] = b[i];
+
+    PolyMulbatch<P, batch>(res, a, *bPtr);
+}
+
+
 
 
 template <class P>
