@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <tfhe++.hpp>
+#include <chrono>
 
 using namespace std;
 using namespace TFHEpp;
