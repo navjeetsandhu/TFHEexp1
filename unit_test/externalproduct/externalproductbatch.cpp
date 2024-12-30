@@ -18,6 +18,7 @@ int main()
     random_device seed_gen;
     default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> binary(0, 1);
+    chrono::system_clock::time_point start, end;
 
     cout << "test p=1: lvl1 batch" << endl;
 
@@ -27,32 +28,31 @@ int main()
             for (int i = 0; i < lvl1param::n; i++)
                 p[j][i] = (binary(engine) > 0);
 
-        cout << "a" << endl;
+        //cout << "a" << endl;
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
                 pmu[j][i] = p[j][i] ? lvl1param::mu : -lvl1param::mu;
 
-    chrono::system_clock::time_point start, end;
-    start = chrono::system_clock::now();
+    	start = chrono::system_clock::now();
 
         TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
 
-        cout << "b" << endl;
+        //cout << "b" << endl;
         for (int j = 0; j < batch; j++)
             plainpoly[j][0] = 1;
 
-        cout << "c" << endl;
+        //cout << "c" << endl;
         //for (int j = 0; j < batch; j++)
         //    for (int i = 0; i < lvl1param::n; i++)
          //       cout << j << " " << i << " " << plainpoly[j][i] <<  endl;
 
         TRGSWFFTn<lvl1param, batch> trgswfft =
             trgswfftSymEncryptbatch<lvl1param, batch>(plainpoly, key.lvl1);
-        cout << "d" << endl;
+        //cout << "d" << endl;
         trgswfftExternalProductbatch<lvl1param, batch>(c, c, trgswfft);
-        cout << "e" << endl;
+        //cout << "e" << endl;
         BooleanArrayn<lvl1param::n, batch> p2 = trlweSymDecryptbatch<lvl1param, batch>(c, key.lvl1);
-        cout << "f" << endl;
+        //cout << "f" << endl;
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++) {
                 //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
