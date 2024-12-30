@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <tfhe++.hpp>
+#include <chrono>
 
 using namespace std;
 using namespace TFHEpp;
@@ -31,6 +32,9 @@ int main()
             for (int i = 0; i < lvl1param::n; i++)
                 pmu[j][i] = p[j][i] ? lvl1param::mu : -lvl1param::mu;
 
+    chrono::system_clock::time_point start, end;
+    start = chrono::system_clock::now();
+
         TRLWEn<lvl1param, batch> c = trlweSymEncryptbatch<lvl1param, batch>(pmu, key.lvl1);
 
         cout << "b" << endl;
@@ -54,9 +58,17 @@ int main()
                 //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
                 c_assert(p[j][i] == p2[j][i]);
             }
+
+		end = chrono::system_clock::now();
     }
     cout << "Passed" << endl;
     cout << "test p=-1: lvl1 batch" << endl;
+
+    double elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+            .count();
+    cout << elapsed / batch << "ms" << endl;
+
 /*
     {
         lweKey key;
