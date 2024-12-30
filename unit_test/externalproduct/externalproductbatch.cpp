@@ -69,6 +69,7 @@ int main()
             .count();
     cout << elapsed / batch << "ms" << " for batch size "  << batch << endl;
 
+/*
     cout << "test p=-1: lvl1 batch" << endl;
 
     {
@@ -117,5 +118,5 @@ int main()
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
             .count();
     cout << elapsed / batch << "ms" << " for batch size "  << batch << endl;
-
+*/
 }
