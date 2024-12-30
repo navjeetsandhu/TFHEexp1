@@ -12,7 +12,7 @@ namespace TFHEpp {
 template <class P>
 TRGSWFFT<P> ApplyFFT2trgsw(const TRGSW<P> &trgsw)
 {
-    std::cout << " ApplyFFT2trgsw ";
+    //std::cout << " ApplyFFT2trgsw ";
     alignas(64) TRGSWFFT<P> trgswfft;
     for (int i = 0; i < (P::k + 1) * P::l; i++)
         for (int j = 0; j < (P::k + 1); j++)
@@ -129,7 +129,7 @@ template <class P>
 TRGSWFFT<P> trgswfftSymEncrypt(const Polynomial<P> &p, const double alpha,
                                const Key<P> &key)
 {
-    std::cout << " trgswfftSymEncrypt ";
+    //std::cout << " trgswfftSymEncrypt ";
     TRGSW<P> trgsw = trgswSymEncrypt<P>(p, alpha, key);
     return ApplyFFT2trgsw<P>(trgsw);
 }
