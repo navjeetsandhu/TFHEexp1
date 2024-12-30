@@ -1,0 +1,71 @@
+Batch size of batch size 35,  external product multiplication is improved to 2ms from 18ms.
+
+
+[100%] Built target trlweSymEncrypt
+[solana@localhost externalproduct]$ ./externalproduct
+-- Initializing FPGA ...
+-- 2 platforms found
+	0: found: intel(r) fpga sdk for opencl(tm), parameter: intel(r) fpga sdk for opencl(tm)
+
+-- 1 devices found
+	Choosing first device by default
+
+-- Getting program binary from path: /home/solana/code/TFHEexp/thirdparties/fpga/libs/aocx/fft1d.aocx
+-- Building the program
+
+lvl1 test p=1
+18.8ms
+Passed
+lvl1 test p=-1
+17ms
+Passed
+-- Cleaning up FPGA resources ...
+[solana@localhost externalproduct]$ ./externalproduct
+-- Initializing FPGA ...
+-- 2 platforms found
+	0: found: intel(r) fpga sdk for opencl(tm), parameter: intel(r) fpga sdk for opencl(tm)
+
+-- 1 devices found
+	Choosing first device by default
+
+-- Getting program binary from path: /home/solana/code/TFHEexp/thirdparties/fpga/libs/aocx/fft1d.aocx
+-- Building the program
+
+lvl1 test p=1
+18.2ms
+Passed
+lvl1 test p=-1
+21ms
+Passed
+-- Cleaning up FPGA resources ...
+[solana@localhost externalproduct]$ ./externalproductbatch
+-- Initializing FPGA ...
+-- 2 platforms found
+	0: found: intel(r) fpga sdk for opencl(tm), parameter: intel(r) fpga sdk for opencl(tm)
+
+-- 1 devices found
+	Choosing first device by default
+
+-- Getting program binary from path: /home/solana/code/TFHEexp/thirdparties/fpga/libs/aocx/fft1d.aocx
+-- Building the program
+
+test p=1: lvl1 batch
+Passed
+2.02857ms for batch size 35
+-- Cleaning up FPGA resources ...
+[solana@localhost externalproduct]$ ./externalproductbatch_1
+-- Initializing FPGA ...
+-- 2 platforms found
+	0: found: intel(r) fpga sdk for opencl(tm), parameter: intel(r) fpga sdk for opencl(tm)
+
+-- 1 devices found
+	Choosing first device by default
+
+-- Getting program binary from path: /home/solana/code/TFHEexp/thirdparties/fpga/libs/aocx/fft1d.aocx
+-- Building the program
+
+test p= -1: lvl1 batch
+Passed
+2.37143ms for batch size 35
+-- Cleaning up FPGA resources ...
+[solana@localhost externalproduct]$
