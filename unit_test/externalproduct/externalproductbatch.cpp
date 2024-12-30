@@ -62,17 +62,19 @@ int main()
 		end = chrono::system_clock::now();
     }
     cout << "Passed" << endl;
-    cout << "test p=-1: lvl1 batch" << endl;
 
     double elapsed =
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
             .count();
-    cout << elapsed / batch << "ms" << endl;
+    cout << elapsed / batch << "ms" << " for batch size "  << batch << endl;
 
-/*
+    cout << "test p=-1: lvl1 batch" << endl;
+
     {
         lweKey key;
         BooleanArrayn<lvl1param::n, batch> p;
+
+		start = chrono::system_clock::now();
 
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++)
@@ -106,8 +108,13 @@ int main()
                 //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
                 c_assert(p[j][i] == !p2[j][i]);
             }
+		end = chrono::system_clock::now();
     }
     cout << "Passed" << endl;
-*/
+
+    double elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+            .count();
+    cout << elapsed / batch << "ms" << " for batch size "  << batch << endl;
 
 }
