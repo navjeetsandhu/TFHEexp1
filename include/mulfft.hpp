@@ -29,7 +29,7 @@ inline void TwistIFFTbatch(PolynomialInFDn<P, batch> &res, const Polynomialn<P, 
 template <class P>
 inline void TwistFFT(Polynomial<P> &res, const PolynomialInFD<P> &a)
 {
-    std::cout << " t ";
+    //std::cout << " t ";
     if constexpr (std::is_same_v<P, lvl1param>)
         TwistFpgaFFT<P::n>(res, a);
     else if constexpr (std::is_same_v<typename P::T, uint64_t>)
@@ -42,7 +42,7 @@ inline void TwistFFT(Polynomial<P> &res, const PolynomialInFD<P> &a)
 template <class P>
 inline void TwistFFTrescale(Polynomial<P> &res, const PolynomialInFD<P> &a)
 {
-    std::cout << " z ";
+    //std::cout << " z ";
     if constexpr (std::is_same_v<P, lvl1param>)
         TwistFpgaFFTrescale<P>(res, a);
     else if constexpr (std::is_same_v<P, lvl2param>)
@@ -169,7 +169,7 @@ template <class P>
 inline void PolyMulFFT(Polynomial<P> &res, const Polynomial<P> &a,
                        const Polynomial<P> &b)
 {
-    std::cout << " PolyMulFFT ";
+    //std::cout << " PolyMulFFT ";
     alignas(64) PolynomialInFD<P> ffta;
     TwistIFFT<P>(ffta, a);
     alignas(64) PolynomialInFD<P> fftb;

@@ -8,7 +8,7 @@ namespace TFHEpp {
 template <class P>
 TRLWE<P> trlweSymEncryptZero(const double alpha, const Key<P> &key)
 {
-    std::cout << " trlweSymEncryptZero ";
+    //std::cout << " trlweSymEncryptZero ";
     constexpr auto numeric_limit = std::numeric_limits<typename P::T>::max(); // i.e. 0xFFFFFFFF
     constexpr auto dimension = P::n; // i.e. 1024
     constexpr auto k_max = P::k;  // i.e 1
@@ -60,7 +60,7 @@ TRLWEn<P, batch> trlweSymEncryptZerobatch(const double alpha, const Key<P> &key)
 template <class P>
 TRLWE<P> trlweSymEncryptZero(const uint eta, const Key<P> &key)
 {
-    std::cout << " trlweSymEncryptZero ";
+    //std::cout << " trlweSymEncryptZero ";
     constexpr auto numeric_limit = std::numeric_limits<typename P::T>::max(); // i.e. 0xFFFFFFFF
     constexpr auto dimension = P::n; // i.e. 1024
     constexpr auto k_max = P::k; // i.e 1
@@ -85,7 +85,7 @@ TRLWE<P> trlweSymEncryptZero(const uint eta, const Key<P> &key)
 template <class P, int batch>
 TRLWEn<P, batch> trlweSymEncryptZerobatch(const uint eta, const Key<P> &key)
 {
-    std::cout << " trlweSymEncryptZerobatch ";
+    //std::cout << " trlweSymEncryptZerobatch ";
     constexpr auto numeric_limit = std::numeric_limits<typename P::T>::max(); // i.e. 0xFFFFFFFF
     constexpr auto dimension = P::n; // i.e. 1024
     constexpr auto k_max = P::k; // i.e 1
@@ -265,7 +265,7 @@ TRLWEn<P, batch> trlweSymIntEncryptbatch(const Polynomialn<P, batch> &p,
 template <class P>
 Polynomial<P> trlwePhase(const TRLWE<P> &c, const Key<P> &key)
 {
-    std::cout << " trlwePhase ";
+    //std::cout << " trlwePhase ";
     Polynomial<P> phase = c[P::k];
     for (int k = 0; k < P::k; k++) {
         Polynomial<P> mulres;
@@ -315,7 +315,7 @@ std::array<bool, P::n> trlweSymDecrypt(const TRLWE<P> &c, const Key<P> &key)
 template <class P, int batch>
 BooleanArrayn<P::n, batch> trlweSymDecryptbatch(const TRLWEn<P, batch> &c, const Key<P> &key)
 {
-    std::cout << " trlweSymDecryptbatch ";
+    //std::cout << " trlweSymDecryptbatch ";
     Polynomialn<P, batch> phase = trlwePhasebatch<P, batch>(c, key);
 
     BooleanArrayn<P::n, batch> p;
@@ -335,7 +335,7 @@ BooleanArrayn<P::n, batch> trlweSymDecryptbatch(const TRLWEn<P, batch> &c, const
 template <class P>
 Polynomial<P> trlweSymIntDecrypt(const TRLWE<P> &c, const Key<P> &key)
 {
-    std::cout << " trlweSymIntDecrypt ";
+    //std::cout << " trlweSymIntDecrypt ";
     Polynomial<P> phase = c[P::k];
     for (int k = 0; k < P::k; k++) {
         Polynomial<P> mulres;
@@ -355,7 +355,7 @@ Polynomial<P> trlweSymIntDecrypt(const TRLWE<P> &c, const Key<P> &key)
 template <class P, int batch>
 Polynomialn<P, batch> trlweSymIntDecrypt(const TRLWEn<P, batch> &c, const Key<P> &key)
 {
-    std::cout << " trlweSymIntDecryptbatch ";
+    //std::cout << " trlweSymIntDecryptbatch ";
     Polynomialn<P, batch> phase = c[P::k];
     for (int k = 0; k < P::k; k++) {
         for (int j=0;j<batch;j++) {
