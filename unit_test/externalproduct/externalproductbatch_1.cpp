@@ -21,7 +21,7 @@ int main()
     chrono::system_clock::time_point start, end;
 	double elapsed;
 
-    cout << "test p=1: lvl1 batch" << endl;
+    cout << "test p= -1: lvl1 batch" << endl;
 
     {
         lweKey key;
@@ -40,7 +40,7 @@ int main()
 
         //cout << "b" << endl;
         for (int j = 0; j < batch; j++)
-            plainpoly[j][0] = 1;
+            plainpoly[j][0] = -1;
 
         //cout << "c" << endl;
         //for (int j = 0; j < batch; j++)
@@ -57,7 +57,7 @@ int main()
         for (int j = 0; j < batch; j++)
             for (int i = 0; i < lvl1param::n; i++) {
                 //cout << j << " " << i << " " << p[j][i] << "  " << p2[j][i] << endl;
-                c_assert(p[j][i] == p2[j][i]);
+                c_assert(p[j][i] == !p2[j][i]);
             }
 
 		end = chrono::system_clock::now();

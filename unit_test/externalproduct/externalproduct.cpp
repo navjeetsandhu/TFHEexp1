@@ -12,10 +12,12 @@ int main()
     random_device seed_gen;
     default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> binary(0, 1);
-    cout << "test p=1" << endl;
+    cout << "lvl1 test p=1" << endl;
+    chrono::system_clock::time_point start, end;
+	double elapsed;
 
-    cout << "lvl1" << endl;
-    {
+	start = chrono::system_clock::now();
+    for (int testi = 0; testi< 10; testi++) {
         lweKey key;
 
         array<bool, lvl1param::n> p;
@@ -41,12 +43,18 @@ int main()
             c_assert(p[i] == p2[i]);
         }
     }
+	end = chrono::system_clock::now();
+
+    elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+            .count();
+    cout << elapsed / 10 << "ms" << endl;
 
     cout << "Passed" << endl;
 
-    cout << "test p=-1" << endl;
+    cout << "lvl1 test p=-1" << endl;
 
-    cout << "lvl1" << endl;
+	start = chrono::system_clock::now();
     {
         lweKey key;
 
@@ -68,8 +76,15 @@ int main()
             //cout << p[i] << "  " << p2[i] << endl;
             c_assert(p[i] == !p2[i]);
         }
-
     }
+
+	end = chrono::system_clock::now();
+
+    elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+            .count();
+    cout << elapsed  << "ms" << endl;
+
     cout << "Passed" << endl;
 
 }
