@@ -19,6 +19,7 @@ int main()
     default_random_engine engine(seed_gen());
     uniform_int_distribution<uint32_t> binary(0, 1);
     chrono::system_clock::time_point start, end;
+	double elapsed;
 
     cout << "test p=1: lvl1 batch" << endl;
 
@@ -63,7 +64,7 @@ int main()
     }
     cout << "Passed" << endl;
 
-    double elapsed =
+    elapsed =
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
             .count();
     cout << elapsed / batch << "ms" << " for batch size "  << batch << endl;
@@ -112,7 +113,7 @@ int main()
     }
     cout << "Passed" << endl;
 
-    double elapsed =
+    elapsed =
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
             .count();
     cout << elapsed / batch << "ms" << " for batch size "  << batch << endl;
