@@ -105,6 +105,15 @@ inline void MulInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P
     }
 }
 
+template <class P, int batch>
+inline void MulInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P, batch> &a,
+                         const PolynomialInFD<P> &b)
+{
+    for (int i=0; i< batch; i++) {
+        MulInFD<P::n>(res[i], a[i], b);
+    }
+}
+
 
 // Be careful about memory accesses (We assume b has relatively high memory access cost)
 template <uint32_t N>
@@ -130,6 +139,16 @@ inline void FMAInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P
         FMAInFD<P::n>(res[j], a[j], b[j]);
     }
 }
+
+template <class P, int batch>
+inline void FMAInFDbatch(PolynomialInFDn<P, batch> &res, const PolynomialInFDn<P, batch> &a,
+                         const PolynomialInFD<P> &b)
+{
+    for (int j=0; j< batch; j++) {
+        FMAInFD<P::n>(res[j], a[j], b);
+    }
+}
+
 
 template <class P>
 inline void PolyMulNaive(Polynomial<P> &res, const Polynomial<P> &a,
