@@ -70,4 +70,45 @@ void CMUXFFTwithPolynomialMulByXaiMinusOne(
     }
 }
 
+template <class bkP, int batch>
+void CMUXFFTwithPolynomialMulByXaiMinusOnebatch(
+    TRLWEn<typename bkP::targetP, batch> &acc,
+    const BootstrappingKeyElementFFT<bkP> &cs, const intArray &a)
+{
+    if constexpr (bkP::domainP::key_value_diff == 1) {
+        alignas(64) TRLWEn<typename bkP::targetP, batch> temp;
+        for (int j = 0; j < batch; j++)
+            for (int k = 0; k < bkP::targetP::k + 1; k++)
+                PolynomialMulByXaiMinusOne<typename bkP::targetP>(temp[j][k], acc[j][k],
+                                                              a[j]);
+        trgswfftExternalProductbatch<typename bkP::targetP>(temp, temp, cs[0]);
+        for (int j = 0; j < batch; j++)
+            for (int k = 0; k < bkP::targetP::k + 1; k++)
+                for (int i = 0; i < bkP::targetP::n; i++) acc[j][k][i] += temp[j][k][i];
+    }
+    else {
+        alignas(32) TRLWEn<typename bkP::targetP, batch> temp;
+        int count = 0;
+        for (int i = bkP::domainP::key_value_min;
+             i <= bkP::domainP::key_value_max; i++) {
+            if (i != 0) {
+                const int mod = (a * i) % (2 * bkP::targetP::n);
+                const int index = mod > 0 ? mod : mod + (2 * bkP::targetP::n);
+                for (int j = 0; j < batch; j++)
+                   for (int k = 0; k < bkP::targetP::k + 1; k++)
+                        PolynomialMulByXaiMinusOne<typename bkP::targetP>(
+                            temp[j][k], acc[j][k], index);
+                trgswfftExternalProductbatch<typename bkP::targetP>(temp, temp,
+                                                               cs[count]);
+                for (int j = 0; j < batch; j++)
+                    for (int k = 0; k < bkP::targetP::k + 1; k++)
+                        for (int n = 0; n < bkP::targetP::n; n++)
+                            acc[j][k][n] += temp[j][k][n];
+                count++;
+            }
+        }
+    }
+}
+
+
 }  // namespace TFHEpp
