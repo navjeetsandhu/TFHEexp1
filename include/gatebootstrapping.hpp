@@ -24,6 +24,19 @@ void GateBootstrappingTLWE2TLWEFFT(
     SampleExtractIndex<typename P::targetP>(res, acc, 0);
 }
 
+template <class P, int batch>
+void GateBootstrappingTLWE2TLWEFFTbatch(
+    TLWEn<typename P::targetP, batch> &res, const TLWEn<typename P::domainP, batch> &tlwe,
+    const BootstrappingKeyFFT<P> &bkfft,
+    const Polynomial<typename P::targetP> &testvector)
+{
+    alignas(64) std::unique_ptr<TRLWEn<typename P::targetP, batch>> accPtr = std::make_unique<TRLWEn<typename P::targetP, batch>>();
+    BlindRotatebatch<P, batch>(*accPtr, tlwe, bkfft, testvector);
+    for (int i = 0; i < batch; i++)
+        SampleExtractIndex<typename P::targetP>(res[j], acc[j], 0);
+}
+
+
 template <class P, uint32_t num_out>
 void GateBootstrappingManyLUT(
     std::array<TLWE<typename P::targetP>, num_out> &res,
