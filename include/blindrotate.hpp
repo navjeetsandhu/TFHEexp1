@@ -48,7 +48,7 @@ template <class P, int batch, uint32_t num_out = 1>
 void BlindRotatebatch(TRLWEn<typename P::targetP, batch> &res,
                  const TLWEn<typename P::domainP, batch> &tlwe,
                  const BootstrappingKeyFFT<P> &bkfft,
-                 const Polynomialn<typename P::targetP, batch> &testvector)
+                 const Polynomial<typename P::targetP> &testvector)
 {
     res = {};
     constexpr uint32_t bitwidth = bits_needed<num_out - 1>();
@@ -60,7 +60,7 @@ void BlindRotatebatch(TRLWEn<typename P::targetP, batch> &res,
                P::targetP::nbit + bitwidth))
              << bitwidth);
 
-        PolynomialMulByXai<typename P::targetP>(res[j][P::targetP::k], testvector[j],
+        PolynomialMulByXai<typename P::targetP>(res[j][P::targetP::k], testvector,
                                                 bLong);
     }
     for (int i = 0; i < P::domainP::k * P::domainP::n; i++) {
