@@ -69,7 +69,7 @@ void GateBootstrapping(TLWE<typename iksP::domainP> &res,
 }
 
 
-template <class iksP, class bkP, typename bkP::targetP::T mu, unt batch>
+template <class iksP, class bkP, typename bkP::targetP::T mu, int batch>
 void GateBootstrappingbatch(TLWEn<typename iksP::domainP, batch> &res,
                        const TLWEn<typename iksP::domainP, batch> &tlwe,
                        const EvalKey &ek)
