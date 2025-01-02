@@ -18,6 +18,23 @@ inline void HomGate(TLWE<typename brP::targetP> &res,
     GateBootstrapping<iksP, brP, mu>(res, res, ek);
 }
 
+template <class iksP, class brP, typename brP::targetP::T mu, int casign,
+          int cbsign, std::make_signed_t<typename iksP::domainP::T> offset, int batch>
+inline void HomGatebatch(TLWEn<typename brP::targetP, batch> &res,
+                    const TLWEn<typename iksP::domainP, batch> &ca,
+                    const TLWEn<typename iksP::domainP, batch> &cb, const EvalKey &ek)
+{
+    for (int j = 0; j < batch; j++)
+        for (int i = 0; i <= iksP::domainP::k * iksP::domainP::n; i++)
+            res[j][i] = casign * ca[j][i] + cbsign * cb[j][i];
+
+    for (int j = 0; j < batch; j++)
+        res[j][iksP::domainP::k * iksP::domainP::n] += offset;
+    
+    GateBootstrappingbatch<iksP, brP, mu, batch>(res, res, ek);
+}
+
+
 // No input
 template <class P = lvl1param>
 void HomCONSTANTONE(TLWE<P> &res)
