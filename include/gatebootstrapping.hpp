@@ -32,7 +32,7 @@ void GateBootstrappingTLWE2TLWEFFTbatch(
 {
     alignas(64) std::unique_ptr<TRLWEn<typename P::targetP, batch>> accPtr = std::make_unique<TRLWEn<typename P::targetP, batch>>();
     BlindRotatebatch<P, batch>(*accPtr, tlwe, bkfft, testvector);
-    for (int i = 0; i < batch; i++)
+    for (int j = 0; j < batch; j++)
         SampleExtractIndex<typename P::targetP>(res[j], (*accPtr)[j], 0);
 }
 
