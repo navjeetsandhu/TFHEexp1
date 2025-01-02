@@ -30,7 +30,7 @@ inline void HomGatebatch(TLWEn<typename brP::targetP, batch> &res,
 
     for (int j = 0; j < batch; j++)
         res[j][iksP::domainP::k * iksP::domainP::n] += offset;
-    
+
     GateBootstrappingbatch<iksP, brP, mu, batch>(res, res, ek);
 }
 
@@ -71,6 +71,16 @@ void HomNAND(TLWE<typename brP::targetP> &res,
 {
     HomGate<iksP, brP, mu, -1, -1, iksP::domainP::mu>(res, ca, cb, ek);
 }
+
+template <int batch, class iksP = lvl10param, class brP = lvl01param,
+          typename brP::targetP::T mu = lvl1param::mu>
+void HomNANDbatch(TLWEn<typename brP::targetP, batch> &res,
+             const TLWEn<typename iksP::domainP, batch> &ca,
+             const TLWEn<typename iksP::domainP, batch> &cb, const EvalKey &ek)
+{
+    HomGatebatch<iksP, brP, mu, -1, -1, iksP::domainP::mu, batch>(res, ca, cb, ek);
+}
+
 
 
 template <class iksP = lvl10param, class brP = lvl01param,
