@@ -51,8 +51,8 @@ void BlindRotatebatch(TRLWEn<typename P::targetP, batch> &res,
                  const Polynomialn<typename P::targetP, batch> &testvector)
 {
     res = {};
+    constexpr uint32_t bitwidth = bits_needed<num_out - 1>();
     for (int j = 0; j < batch; j++) {
-        constexpr uint32_t bitwidth = bits_needed<num_out - 1>();
         const uint32_t bLong =
             2 * P::targetP::n -
             ((tlwe[j][P::domainP::k * P::domainP::n] >>
