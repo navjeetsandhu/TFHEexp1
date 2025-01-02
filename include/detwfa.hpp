@@ -73,7 +73,7 @@ void CMUXFFTwithPolynomialMulByXaiMinusOne(
 template <class bkP, int batch>
 void CMUXFFTwithPolynomialMulByXaiMinusOnebatch(
     TRLWEn<typename bkP::targetP, batch> &acc,
-    const BootstrappingKeyElementFFT<bkP> &cs, const intArray &a)
+    const BootstrappingKeyElementFFT<bkP> &cs, const intArray<batch> &a)
 {
     if constexpr (bkP::domainP::key_value_diff == 1) {
         alignas(64) TRLWEn<typename bkP::targetP, batch> temp;
