@@ -68,4 +68,20 @@ void GateBootstrapping(TLWE<typename iksP::domainP> &res,
                                        mupolygen<typename bkP::targetP, mu>());
 }
 
+
+template <class iksP, class bkP, typename bkP::targetP::T mu, unt batch>
+void GateBootstrappingbatch(TLWEn<typename iksP::domainP, batch> &res,
+                       const TLWEn<typename iksP::domainP, batch> &tlwe,
+                       const EvalKey &ek)
+{
+    alignas(64) std::unique_ptr<TLWEn<typename iksP::targetP, batch>> tlwelvl0Ptr = std::make_unique<TLWEn<typename iksP::targetP, batch>>();
+
+    for (int j = 0; j < batch; j++)
+        IdentityKeySwitch<iksP>((*tlwelvl0Ptr)[j], tlwe[j], ek.getiksk<iksP>());
+
+    GateBootstrappingTLWE2TLWEFFTbatch<bkP, batch>(res, *tlwelvl0Ptr, ek.getbkfft<bkP>(),
+                                       mupolygen<typename bkP::targetP, mu>());
+}
+
+
 }  // namespace TFHEpp
