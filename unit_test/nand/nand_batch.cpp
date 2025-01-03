@@ -52,9 +52,9 @@ int main()
     chrono::system_clock::time_point start, end;
     start = chrono::system_clock::now();
 
-
+/*
     HomNANDbatch<batch>(cres, ca, cb, ek);
-
+*/
 
     end = chrono::system_clock::now();
 
