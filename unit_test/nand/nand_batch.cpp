@@ -10,7 +10,7 @@
 using namespace std;
 using namespace TFHEpp;
 
-constexpr int batch = 2;
+constexpr int batch = otherparam::batch;
 vector<uint8_t> pa(batch);
 vector<uint8_t> pb(batch);
 vector<uint8_t> pres(batch);

@@ -4,7 +4,7 @@
 #include <limits>
 
 struct otherparam {
-    static constexpr int32_t batch = 2;
+    static constexpr int batch = 2;
 };
 
 struct lvl0param {
