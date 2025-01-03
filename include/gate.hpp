@@ -31,7 +31,7 @@ inline void HomGatebatch(TLWEn<typename brP::targetP, batch> &res,
     for (int j = 0; j < batch; j++)
         res[j][iksP::domainP::k * iksP::domainP::n] += offset;
 
-    GateBootstrappingbatch<iksP, brP, mu, batch>(res, res, ek);
+    //GateBootstrappingbatch<iksP, brP, mu, batch>(res, res, ek);
 }
 
 
