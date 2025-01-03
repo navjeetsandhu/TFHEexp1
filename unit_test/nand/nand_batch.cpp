@@ -69,6 +69,6 @@ int main()
     double elapsed =
         chrono::duration_cast<chrono::milliseconds>(end - start)
             .count();
-    cout << total elapsed << "ms" << endl;
+    cout << elapsed << "ms is total elapsed" << endl;
     cout << elapsed / batch << "ms" << endl;
 }
