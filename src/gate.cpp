@@ -61,7 +61,13 @@ INST(lvl0param);
 TFHEPP_EXPLICIT_INSTANTIATION_GATE_IKSBR(INST)
 #undef INST
 
-
+#define INST(iksP, brP, mu, batch)                      \
+    template void HomNANDbatch<iksP, brP, mu, batch>(        \
+        TLWEn<typename brP::targetP, batch> & res,      \
+        const TLWEn<typename iksP::domainP, batch> &ca, \
+        const TLWEn<typename iksP::domainP, batch> &cb, const EvalKey &ek)
+TFHEPP_EXPLICIT_INSTANTIATION_GATE_BATCH_IKSBR(INST)
+#undef INST
 
 #define INST(iksP, brP, mu)                                                     \
     template void HomNOR<iksP, brP, mu>(TLWE<typename brP::targetP> & res,      \
