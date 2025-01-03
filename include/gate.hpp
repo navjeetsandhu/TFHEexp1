@@ -74,6 +74,16 @@ void HomNAND(TLWE<typename brP::targetP> &res,
 
 
 template <class iksP = lvl10param, class brP = lvl01param,
+          typename brP::targetP::T mu = lvl1param::mu, int batch =2>
+void HomNANDbatch(TLWEn<typename brP::targetP, batch> &res,
+             const TLWEn<typename iksP::domainP, batch> &ca,
+             const TLWEn<typename iksP::domainP, batch> &cb, const EvalKey &ek)
+{
+    HomGatebatch<iksP, brP, mu, -1, -1, iksP::domainP::mu, batch>(res, ca, cb, ek);
+}
+
+
+template <class iksP = lvl10param, class brP = lvl01param,
           typename brP::targetP::T mu = lvl1param::mu>
 void HomNOR(TLWE<typename brP::targetP> &res,
             const TLWE<typename iksP::domainP> &ca,
