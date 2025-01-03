@@ -3,6 +3,10 @@
 #include <cmath>
 #include <limits>
 
+struct otherparam {
+    static constexpr int32_t batch = 2;
+}
+
 struct lvl0param {
     static constexpr int32_t key_value_max = 1;
     static constexpr int32_t key_value_min = 0;
