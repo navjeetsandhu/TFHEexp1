@@ -61,7 +61,7 @@ int main()
     }
 
     pres = bootsSymDecrypt(ccres, *sk);
-    int passCount, failCount = 0;
+    int passCount =0, failCount = 0;
 
     for (int i = 0; i < batch; i++) {
         if(pres[i] == !(pa[i] & pb[i]))
