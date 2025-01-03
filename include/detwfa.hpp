@@ -81,7 +81,7 @@ void CMUXFFTwithPolynomialMulByXaiMinusOnebatch(
             for (int k = 0; k < bkP::targetP::k + 1; k++)
                 PolynomialMulByXaiMinusOne<typename bkP::targetP>(temp[j][k], acc[j][k],
                                                                   aArray[j]);
-        trgswfftExternalProductbatch<typename bkP::targetP>(temp, temp, cs[0]);
+        trgswfftExternalProductbatch<typename bkP::targetP, batch>(temp, temp, cs[0]);
         for (int j = 0; j < batch; j++)
             for (int k = 0; k < bkP::targetP::k + 1; k++)
                 for (int i = 0; i < bkP::targetP::n; i++) acc[j][k][i] += temp[j][k][i];
