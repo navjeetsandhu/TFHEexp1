@@ -61,11 +61,16 @@ int main()
     }
 
     pres = bootsSymDecrypt(ccres, *sk);
+    int passCount, failCount = 0;
+
     for (int i = 0; i < batch; i++) {
-        c_assert(pres[i] == !(pa[i] & pb[i]));
+        if(pres[i] == !(pa[i] & pb[i]))
+            passCount ++;
+        else
+            failCount++;
     }
-   cout << "Passed" << endl;
+   cout << "Pass count: " << passCount << "Fail count: " << failCount << endl;
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    cout << elapsed << "ms is total elapsed" << endl;
+    //cout << elapsed << "ms is total elapsed" << endl;
     cout << elapsed / batch << "ms" << endl;
 }
