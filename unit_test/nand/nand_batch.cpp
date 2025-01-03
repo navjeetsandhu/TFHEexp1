@@ -52,7 +52,7 @@ int main()
     chrono::system_clock::time_point start, end;
     start = chrono::system_clock::now();
 
-    HomNANDbatch(cres, ca, cb, ek);
+    HomNANDbatch<lvl10param, lvl01param, lvl1param::mu, otherparam::batch>(cres, ca, cb, ek);
 
     for (j = 0; j < batch; j++) {
         ccres[j] = cres[j];
