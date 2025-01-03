@@ -64,11 +64,8 @@ int main()
     for (int i = 0; i < batch; i++) {
         c_assert(pres[i] == !(pa[i] & pb[i]));
     }
-   cout << "Passed start: " << std::chrono::duration_cast<std::chrono::milliseconds>(start).count()
-         << " end: " << std::chrono::duration_cast<std::chrono::milliseconds>(end).count() << endl;
-    double elapsed =
-       std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
-            .count();
+   cout << "Passed" << endl;
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     cout << elapsed << "ms is total elapsed" << endl;
     cout << elapsed / batch << "ms" << endl;
 }
