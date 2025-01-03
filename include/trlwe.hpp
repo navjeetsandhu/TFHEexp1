@@ -388,18 +388,19 @@ void SampleExtractIndex(TLWE<P> &tlwe, const TRLWE<P> &trlwe, const int index)
     tlwe[P::k * P::n] = trlwe[P::k][index];
 }
 
-template <class P>
-void InvSampleExtractIndex(TRLWE<P> &trlwe, const TLWE<P> &tlwe,
-                           const int index)
+template <class P, int batch>
+void SampleExtractIndexbatch(TLWEn<P, batch> &tlwe, const TRLWEn<P, batch> &trlwe, const int index)
 {
-    for (int k = 0; k < P::k; k++) {
-        for (int i = 0; i <= index; i++)
-            trlwe[k][index - i] = tlwe[k * P::n + i];
-        for (int i = index + 1; i < P::n; i++)
-            trlwe[k][P::n + index - i] = -tlwe[k * P::n + i];
+    for (int j= 0; j< batch;j++) {
+        for (int k = 0; k < P::k; k++) {
+            for (int i = 0; i <= index; i++)
+                tlwe[j][k * P::n + i] = trlwe[k][j][index - i];
+            for (int i = index + 1; i < P::n; i++)
+                tlwe[j][k * P::n + i] = -trlwe[k][j][P::n + index - i];
+        }
+        tlwe[j][P::k * P::n] = trlwe[P::k][j][index];
     }
-    trlwe[P::k] = {};
-    trlwe[P::k][index] = tlwe[P::k * P::n];
 }
+
 
 }  // namespace TFHEpp

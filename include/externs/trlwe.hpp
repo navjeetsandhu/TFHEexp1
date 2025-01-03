@@ -38,9 +38,4 @@ TFHEPP_EXPLICIT_INSTANTIATION_TRLWE(INST)
 TFHEPP_EXPLICIT_INSTANTIATION_TRLWE(INST)
 #undef INST
 
-#define INST(P)                             \
-    extern template void InvSampleExtractIndex<P>( \
-        TRLWE<P> & trlwe, const TLWE<P> &tlwe, const int index)
-TFHEPP_EXPLICIT_INSTANTIATION_TRLWE(INST)
-#undef INST
 }
