@@ -60,15 +60,15 @@ int main()
         ccres[j] = cres[j];
     }
 
-
-
     pres = bootsSymDecrypt(ccres, *sk);
     for (int i = 0; i < batch; i++) {
         c_assert(pres[i] == !(pa[i] & pb[i]));
     }
-   cout << "Passed start: " << start << " end: " << end << endl;
+   cout << "Passed start: " << chrono::duration_cast<std::chrono::milliseconds>(start).count()
+         << " end: " << chrono::duration_cast<std::chrono::milliseconds>(end).count() << endl;
     double elapsed =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+        chrono::duration_cast<chrono::milliseconds>(end - start)
             .count();
+    cout << total elapsed << "ms" << endl;
     cout << elapsed / batch << "ms" << endl;
 }
