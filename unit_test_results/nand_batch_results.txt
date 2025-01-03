@@ -1,27 +1,28 @@
 
 [solana@localhost nand]$ pwd
 /home/solana/code/TFHEexp1/build/unit_test/nand
-[solana@localhost nand]$ ./nand_batch 
+[solana@localhost nand]$ ./nand_batch
+
+batch: 50
+89 ms
+
+batch: 35
+90 ms
 
 batch: 30
 100 ms
 
-
 batch: 20
 130 ms
-
 
 batch: 10
 190 ms
 
-
 batch: 5
 350 ms
 
-
 batch: 2
 820 ms
-
 
 batch: 1
 1600 ms
