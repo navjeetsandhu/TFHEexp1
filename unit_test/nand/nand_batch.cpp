@@ -54,17 +54,19 @@ int main()
 
     HomNANDbatch<lvl10param, lvl01param, lvl1param::mu, otherparam::batch>(cres, ca, cb, ek);
 
+    end = chrono::system_clock::now();
+
     for (j = 0; j < batch; j++) {
         ccres[j] = cres[j];
     }
 
-    end = chrono::system_clock::now();
+
 
     pres = bootsSymDecrypt(ccres, *sk);
     for (int i = 0; i < batch; i++) {
         c_assert(pres[i] == !(pa[i] & pb[i]));
     }
-   cout << "Passed" << endl;
+   cout << "Passed start: " << start << " end: " << send << endl;
     double elapsed =
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
             .count();
