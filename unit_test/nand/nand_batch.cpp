@@ -39,6 +39,7 @@ int main()
 
     vector<TLWE<TFHEpp::lvl1param>> caa(batch);
     vector<TLWE<TFHEpp::lvl1param>> cbb(batch);
+    vector<TLWE<TFHEpp::lvl1param>> ccres(batch);
 
     caa = bootsSymEncrypt(pa, *sk);
     cbb = bootsSymEncrypt(pb, *sk);
@@ -53,15 +54,19 @@ int main()
 
     HomNANDbatch(cres, ca, cb, ek);
 
+    for (j = 0; j < batch; j++) {
+        ccres[j] = cres[j];
+    }
+
     end = chrono::system_clock::now();
 
-    pres = bootsSymDecrypt(cres, *sk);
-    for (int i = 0; i < num_test; i++) {
+    pres = bootsSymDecrypt(ccres, *sk);
+    for (int i = 0; i < batch; i++) {
         c_assert(pres[i] == !(pa[i] & pb[i]));
     }
    cout << "Passed" << endl;
     double elapsed =
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
             .count();
-    cout << elapsed / num_test << "ms" << endl;
+    cout << elapsed / batch << "ms" << endl;
 }
