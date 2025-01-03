@@ -79,12 +79,12 @@ void CMUXFFTwithPolynomialMulByXaiMinusOnebatch(
         alignas(64) TRLWEn<typename bkP::targetP, batch> temp;
         for (int j = 0; j < batch; j++)
             for (int k = 0; k < bkP::targetP::k + 1; k++)
-                PolynomialMulByXaiMinusOne<typename bkP::targetP>(temp[j][k], acc[j][k],
+                PolynomialMulByXaiMinusOne<typename bkP::targetP>(temp[k][j], acc[k][j],
                                                                   aArray[j]);
         trgswfftExternalProductbatch<typename bkP::targetP, batch>(temp, temp, cs[0]);
         for (int j = 0; j < batch; j++)
             for (int k = 0; k < bkP::targetP::k + 1; k++)
-                for (int i = 0; i < bkP::targetP::n; i++) acc[j][k][i] += temp[j][k][i];
+                for (int i = 0; i < bkP::targetP::n; i++) acc[k][j][i] += temp[k][j][i];
     }
     else {
         alignas(32) TRLWEn<typename bkP::targetP, batch> temp;
@@ -98,14 +98,14 @@ void CMUXFFTwithPolynomialMulByXaiMinusOnebatch(
                     const int index = mod > 0 ? mod : mod + (2 * bkP::targetP::n);
                     for (int k = 0; k < bkP::targetP::k + 1; k++)
                         PolynomialMulByXaiMinusOne<typename bkP::targetP>(
-                            temp[j][k], acc[j][k], index);
+                            temp[k][j], acc[k][j], index);
                 }
-                trgswfftExternalProductbatch<typename bkP::targetP>(temp, temp,
+                trgswfftExternalProductbatch<typename bkP::targetP, batch>(temp, temp,
                                                                cs[count]);
                 for (int j = 0; j < batch; j++)
                     for (int k = 0; k < bkP::targetP::k + 1; k++)
                         for (int n = 0; n < bkP::targetP::n; n++)
-                            acc[j][k][n] += temp[j][k][n];
+                            acc[k][j][n] += temp[k][j][n];
                 count++;
             }
         }

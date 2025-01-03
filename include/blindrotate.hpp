@@ -60,7 +60,7 @@ void BlindRotatebatch(TRLWEn<typename P::targetP, batch> &res,
                P::targetP::nbit + bitwidth))
              << bitwidth);
 
-        PolynomialMulByXai<typename P::targetP>(res[j][P::targetP::k], testvector,
+        PolynomialMulByXai<typename P::targetP>(res[P::targetP::k][j], testvector,
                                                 bLong);
     }
     for (int i = 0; i < P::domainP::k * P::domainP::n; i++) {
