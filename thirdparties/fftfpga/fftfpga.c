@@ -89,7 +89,7 @@ int fpga_initialize(const char *platform_name, const char *path, const bool use_
   cl_uint num_devices;
   devices = getDevices(platform, CL_DEVICE_TYPE_ALL, &num_devices);
   // Unable to find device for the OpenCL platform
-  printf("\n-- %u devices found\n", num_devices);
+  printf("\n-- %u devices found for platform %s\n", num_devices, platform_name);
   if(devices == NULL){
     return -3;
   }
